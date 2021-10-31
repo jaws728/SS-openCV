@@ -371,6 +371,60 @@ namespace SS_OpenCV
             }
         }
 
+        private void nonUniformToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            float[,] matrix = new float[,] { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } };
+            float weight = 0;
+            float offset = 0;
+
+            FilterForm form = new FilterForm("Filter:");
+            form.ShowDialog();
+            if (form.DialogResult == DialogResult.OK)
+            {
+                switch (form.comboBox1.SelectedIndex)
+                {
+                    case 0:
+                        matrix = new float[,] { {-1.0f, -1.0f, -1.0f}, {-1.0f, 9.0f, -1.0f}, {-1.0f, -1.0f, -1.0f} };
+                        weight = 1;
+                        offset = 0;
+                        break;
+                    case 1:
+                        matrix = new float[,] { { 1.0f, 2.0f, 1.0f }, { 2.0f, 4.0f, 2.0f }, { 1.0f, 2.0f, 1.0f } };
+                        weight = 16;
+                        offset = 0;
+                        break;
+                    case 2:
+                        matrix = new float[,] { { 1.0f, -2.0f, 1.0f }, { -2.0f, 4.0f, -2.0f }, { 1.0f, -2.0f, 1.0f } };
+                        weight = 1;
+                        offset = 0;
+                        break;
+                    case 3:
+                        matrix = new float[,] { { 0.0f, 0.0f, 0.0f }, { -1.0f, 2.0f, -1.0f }, { 0.0f, 0.0f, 0.0f } };
+                        weight = 16;
+                        offset = 0;
+                        break;
+                }
+            } else
+            {
+                return;
+            }
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            ImageClass.NonUniform(img, imgUndo, matrix, weight, offset);
+
+            ImageViewer.Image = img.Bitmap;
+            ImageViewer.Refresh(); // refresh image on the screen
+
+            Cursor = Cursors.Default; // normal cursor
+        }
+
         private void mediaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (img == null) // verify if the image is already opened

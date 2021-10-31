@@ -547,7 +547,7 @@ namespace SS_OpenCV
                 (dataPtr + width * nChan)[0] = (byte)Math.Round((dataPtr_aux[0] * 4 + (dataPtr_aux[0] + widthstep) * 2 + (dataPtr_aux[0] - nChan) * 2 + (dataPtr_aux[0] + widthstep - nChan)) / 9.0);
                 (dataPtr + width * nChan)[1] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux[1] + widthstep) * 2 + (dataPtr_aux[1] - nChan) * 2 + (dataPtr_aux[1] + widthstep - nChan)) / 9.0);
                 (dataPtr + width * nChan)[2] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux[1] + widthstep) * 2 + (dataPtr_aux[1] - nChan) * 2 + (dataPtr_aux[1] + widthstep - nChan)) / 9.0);
-
+                
                 //2 - for border other cases
                 //line top: y = 0
                 for (x = 1; x < width - 1; x++)
@@ -566,6 +566,7 @@ namespace SS_OpenCV
                     (dataPtr + height * widthstep + x * nChan)[2] = (byte)Math.Round(((dataPtr_aux[2] - nChan) * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux[2] + nChan) * 2 + (dataPtr_aux[2] - widthstep - nChan) + (dataPtr_aux[2] - widthstep) + (dataPtr_aux[2] - widthstep + nChan)) / 9.0);
                 }
                 //left line: x = 0
+                /*
                 for (y = 1; y < height - 1; y++)
                 { 
                     dataPtr_aux = (dataPtrC + y * widthstep);
@@ -581,7 +582,7 @@ namespace SS_OpenCV
                     (dataPtr + y * widthstep + width * nChan)[1] = (byte)Math.Round(((dataPtr_aux[1] - widthstep) * 2 + dataPtr_aux[1] * 2 + (dataPtr_aux[1] + widthstep) * 2 + (dataPtr_aux[1] - widthstep - nChan) + (dataPtr_aux[1] - nChan) + (dataPtr_aux[1] + widthstep - nChan)) / 9.0);
                     (dataPtr + y * widthstep + width * nChan)[2] = (byte)Math.Round(((dataPtr_aux[2] - widthstep) * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux[2] + widthstep) * 2 + (dataPtr_aux[2] - widthstep - nChan) + (dataPtr_aux[2] - nChan) + (dataPtr_aux[2] + widthstep - nChan)) / 9.0);
                 }
-
+                */
                 //for center pixels
                 for (y = 1; y < height - 1; y++)
                 {
@@ -613,6 +614,29 @@ namespace SS_OpenCV
                     }
                 }
 
+            }
+        }
+
+
+        public static void NonUniform(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy, float[,] matrix, float matrixWeight, float offset)
+        {
+            unsafe
+            {
+                // obter apontador do inicio da imagems
+                MIplImage m = img.MIplImage;
+                MIplImage mc = imgCopy.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                byte* dataPtrC = (byte*)mc.imageData.ToPointer();
+
+                byte* dataPtr_aux = null;
+
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels;
+                int widthstep = m.widthStep;
+                int padding = widthstep - nChan * width;
+                int x = 0, y = 0;
+                int red, green, blue;
             }
         }
 
