@@ -24,7 +24,7 @@ namespace SS_OpenCV
             {
                 for (x = 0; x < img.Width; x++)
                 {
-                    // acesso directo : mais lento 
+                    //direct access: slower
                     aux = img[y, x];
                     img[y, x] = new Bgr(255 - aux.Blue, 255 - aux.Green, 255 - aux.Red);
                 }
@@ -309,7 +309,7 @@ namespace SS_OpenCV
         {
             unsafe
             {
-                // obter apontador do inicio da imagem
+                // get pointer to the start of the pictures
                 MIplImage m = img.MIplImage;
                 MIplImage mc = imgCopy.MIplImage;
                 byte* dataPtr = (byte*)m.imageData.ToPointer();
@@ -332,7 +332,7 @@ namespace SS_OpenCV
 
                         if (x0 >= 0 && x0 < width && y0 >= 0 && y0 < height)
                         {
-                            // calcula endereço do pixel no ponto (x,y)
+                            // calculate the address of the pixel (x,y)
                             dataPtr_aux = (dataPtrC + y0 * widthstep + x0 * nChan); //point to pixel
                             //store in the image
                             (dataPtr + y * widthstep + x * nChan)[0] = dataPtr_aux[0];
@@ -340,7 +340,7 @@ namespace SS_OpenCV
                             (dataPtr + y * widthstep + x * nChan)[2] = dataPtr_aux[2];
 
                         }
-                        else //pixeis de fora ficam a preto
+                        else //out pixels will be black
                         {
                             (dataPtr + y * widthstep + x * nChan)[0] = 0;
                             (dataPtr + y * widthstep + x * nChan)[1] = 0;
@@ -358,7 +358,7 @@ namespace SS_OpenCV
         {
             unsafe
             {
-                // obter apontador do inicio da imagem
+                // get pointer to the start of the pictures
                 MIplImage m = img.MIplImage;
                 MIplImage mc = imgCopy.MIplImage;
                 byte* dataPtr = (byte*)m.imageData.ToPointer();
@@ -385,7 +385,7 @@ namespace SS_OpenCV
 
                         if (x0 >= 0 && x0 < width && y0 >= 0 && y0 < height)
                         {
-                            // calcula endereço do pixel no ponto (x,y)
+                            // calculate point address (x,y)
                             dataPtr_aux = (dataPtrC + y0 * widthstep + x0 * nChan); //point to pixel
                             //store in the image 
                             (dataPtr + y * widthstep + x * nChan)[0] = dataPtr_aux[0];
@@ -393,7 +393,7 @@ namespace SS_OpenCV
                             (dataPtr + y * widthstep + x * nChan)[2] = dataPtr_aux[2];
 
                         }
-                        else //pixeis de fora ficam a preto
+                        else 
                         {
                             (dataPtr + y * widthstep + x * nChan)[0] = 0;
                             (dataPtr + y * widthstep + x * nChan)[1] = 0;
@@ -410,7 +410,7 @@ namespace SS_OpenCV
         {
             unsafe
             {
-                // obter apontador do inicio da imagem
+                // get pointer to the start of the pictures
                 MIplImage m = img.MIplImage;
                 MIplImage mc = imgCopy.MIplImage;
                 byte* dataPtr = (byte*)m.imageData.ToPointer();
@@ -433,7 +433,6 @@ namespace SS_OpenCV
 
                         if (x0 >= 0 && x0 < width && y0 >= 0 && y0 < height)
                         {
-                            // calcula endereço do pixel no ponto (x,y)
                             dataPtr_aux = (dataPtrC + y0 * widthstep + x0 * nChan); //point to pixel
                             //store in the image 
                             (dataPtr + y * widthstep + x * nChan)[0] = dataPtr_aux[0];
@@ -441,7 +440,7 @@ namespace SS_OpenCV
                             (dataPtr + y * widthstep + x * nChan)[2] = dataPtr_aux[2];
 
                         }
-                        else //pixeis de fora ficam a preto
+                        else
                         {
                             (dataPtr + y * widthstep + x * nChan)[0] = 0;
                             (dataPtr + y * widthstep + x * nChan)[1] = 0;
@@ -459,7 +458,7 @@ namespace SS_OpenCV
         {
             unsafe
             {
-                // obter apontador do inicio da imagem
+                // get pointer to the start of the pictures
                 MIplImage m = img.MIplImage;
                 MIplImage mc = imgCopy.MIplImage;
                 byte* dataPtr = (byte*)m.imageData.ToPointer();
@@ -483,7 +482,6 @@ namespace SS_OpenCV
 
                         if (x0 >= 0 && x0 < width && y0 >= 0 && y0 < height)
                         {
-                            // calcula endereço do pixel no ponto (x,y)
                             dataPtr_aux = (dataPtrC + y0 * widthstep + x0 * nChan); //point to pixel
                             //store in the image 
                             (dataPtr + y * widthstep + x * nChan)[0] = dataPtr_aux[0];
@@ -491,7 +489,7 @@ namespace SS_OpenCV
                             (dataPtr + y * widthstep + x * nChan)[2] = dataPtr_aux[2];
 
                         }
-                        else //pixeis de fora ficam a preto
+                        else
                         {
                             (dataPtr + y * widthstep + x * nChan)[0] = 0;
                             (dataPtr + y * widthstep + x * nChan)[1] = 0;
@@ -509,7 +507,7 @@ namespace SS_OpenCV
         {
             unsafe
             {
-                // obter apontador do inicio da imagem
+                // get pointer to the start of the pictures
                 MIplImage m = img.MIplImage;
                 MIplImage mc = imgCopy.MIplImage;
                 byte* dataPtr = (byte*)m.imageData.ToPointer();
@@ -621,7 +619,7 @@ namespace SS_OpenCV
         {
             unsafe
             {
-                // obter apontador do inicio da imagems
+                // get pointer to the start of the pictures
                 MIplImage m = img.MIplImage;
                 MIplImage mc = imgCopy.MIplImage;
                 byte* dataPtr = (byte*)m.imageData.ToPointer();
@@ -636,6 +634,65 @@ namespace SS_OpenCV
                 int padding = widthstep - nChan * width;
                 int x, y;
                 int red, green, blue;
+
+                /*
+                //for border pixels
+                //1 - for particular cases: border points
+                //x = y = 0
+                dataPtr[0] = (byte)Math.Round((dataPtrC[0] * 4 + (dataPtrC + widthstep)[0] * 2 + (dataPtrC + nChan)[0] * 2 + (dataPtrC + widthstep + nChan)[0]) / 9.0);
+                dataPtr[1] = (byte)Math.Round((dataPtrC[1] * 4 + (dataPtrC + widthstep)[1] * 2 + (dataPtrC + nChan)[1] * 2 + (dataPtrC + widthstep + nChan)[1]) / 9.0);
+                dataPtr[2] = (byte)Math.Round((dataPtrC[2] * 4 + (dataPtrC + widthstep)[2] * 2 + (dataPtrC + nChan)[2] * 2 + (dataPtrC + widthstep + nChan)[2]) / 9.0);
+                //x = 0 and y = height
+                dataPtr_aux = (dataPtrC + (height - 1) * widthstep);
+                (dataPtr + (height - 1) * widthstep)[0] = (byte)Math.Round((dataPtr_aux[0] * 4 + (dataPtr_aux - widthstep)[0] * 2 + (dataPtr_aux + nChan)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0]) / 9.0);
+                (dataPtr + (height - 1) * widthstep)[1] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux - widthstep)[1] * 2 + (dataPtr_aux + nChan)[1] * 2 + (dataPtr_aux - widthstep - nChan)[1]) / 9.0);
+                (dataPtr + (height - 1) * widthstep)[2] = (byte)Math.Round((dataPtr_aux[2] * 4 + (dataPtr_aux - widthstep)[2] * 2 + (dataPtr_aux + nChan)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2]) / 9.0);
+                //x = width and y = height
+                dataPtr_aux = (dataPtrC + (height - 1) * widthstep + (width - 1) * nChan);
+                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[0] = (byte)Math.Round((dataPtr_aux[0] * 4 + (dataPtr_aux - widthstep)[0] * 2 + (dataPtr_aux - nChan)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0]) / 9.0);
+                (dataPtr + (height - 1) * widthstep + width * nChan)[1] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux - widthstep)[1] * 2 + (dataPtr_aux - nChan)[1] * 2 + (dataPtr_aux - widthstep - nChan)[1]) / 9.0);
+                (dataPtr + (height - 1) * widthstep + width * nChan)[2] = (byte)Math.Round((dataPtr_aux[2] * 4 + (dataPtr_aux - widthstep)[2] * 2 + (dataPtr_aux - nChan)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2]) / 9.0);
+                //x = width and y = 0
+                dataPtr_aux = (dataPtrC + (width - 1) * nChan);
+                (dataPtr + (width - 1) * nChan)[0] = (byte)Math.Round((dataPtr_aux[0] * 4 + (dataPtr_aux + widthstep)[0] * 2 + (dataPtr_aux - nChan)[0] * 2 + (dataPtr_aux + widthstep - nChan)[0]) / 9.0);
+                (dataPtr + (width - 1) * nChan)[1] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux + widthstep)[1] * 2 + (dataPtr_aux - nChan)[1] * 2 + (dataPtr_aux + widthstep - nChan)[1]) / 9.0);
+                (dataPtr + (width - 1) * nChan)[2] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux + widthstep)[2] * 2 + (dataPtr_aux - nChan)[2] * 2 + (dataPtr_aux + widthstep - nChan)[2]) / 9.0);
+                */
+                /*
+                //2 - for border other cases
+                //line top: y = 0
+                for (x = 1; x < width - 1; x++)
+                {
+                    dataPtr_aux = (dataPtrC + x * nChan);
+                    (dataPtr + x * nChan)[0] = (byte)Math.Round(((dataPtr_aux - nChan)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + nChan)[0] * 2 + (dataPtr_aux + widthstep - nChan)[0] + (dataPtr_aux + widthstep)[0] + (dataPtr_aux + widthstep + nChan)[0]) / 9.0);
+                    (dataPtr + x * nChan)[1] = (byte)Math.Round(((dataPtr_aux - nChan)[1] * 2 + dataPtr_aux[1] * 2 + (dataPtr_aux + nChan)[1] * 2 + (dataPtr_aux + widthstep - nChan)[1] + (dataPtr_aux + widthstep)[1] + (dataPtr_aux + widthstep + nChan)[1]) / 9.0);
+                    (dataPtr + x * nChan)[2] = (byte)Math.Round(((dataPtr_aux - nChan)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + nChan)[2] * 2 + (dataPtr_aux + widthstep - nChan)[2] + (dataPtr_aux + widthstep)[2] + (dataPtr_aux + widthstep + nChan)[2]) / 9.0);
+                }
+                //bottom line: y = height
+                for (x = 1; x < width - 1; x++)
+                {
+                    dataPtr_aux = (dataPtrC + (height - 1) * widthstep + x * nChan);
+                    (dataPtr + (height - 1) * widthstep + x * nChan)[0] = (byte)Math.Round(((dataPtr_aux - nChan)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + nChan)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0] + (dataPtr_aux - widthstep)[0] + (dataPtr_aux - widthstep + nChan)[0]) / 9.0);
+                    (dataPtr + (height - 1) * widthstep + x * nChan)[1] = (byte)Math.Round(((dataPtr_aux - nChan)[1] * 2 + dataPtr_aux[1] * 2 + (dataPtr_aux + nChan)[1] * 2 + (dataPtr_aux - widthstep - nChan)[1] + (dataPtr_aux - widthstep)[1] + (dataPtr_aux - widthstep + nChan)[1]) / 9.0);
+                    (dataPtr + (height - 1) * widthstep + x * nChan)[2] = (byte)Math.Round(((dataPtr_aux - nChan)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + nChan)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2] + (dataPtr_aux - widthstep)[2] + (dataPtr_aux - widthstep + nChan)[2]) / 9.0);
+                }
+                //left line: x = 0
+                for (y = 1; y < height - 1; y++)
+                {
+                    dataPtr_aux = (dataPtrC + y * widthstep);
+                    (dataPtr + y * widthstep)[0] = (byte)Math.Round(((dataPtr_aux - widthstep)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + widthstep)[0] * 2 + (dataPtr_aux - widthstep + nChan)[0] + (dataPtr_aux + nChan)[0] + (dataPtr_aux + widthstep + nChan)[0]) / 9.0);
+                    (dataPtr + y * widthstep)[1] = (byte)Math.Round(((dataPtr_aux - widthstep)[1] * 2 + dataPtr_aux[1] * 2 + (dataPtr_aux + widthstep)[1] * 2 + (dataPtr_aux - widthstep + nChan)[1] + (dataPtr_aux + nChan)[1] + (dataPtr_aux + widthstep + nChan)[1]) / 9.0);
+                    (dataPtr + y * widthstep)[2] = (byte)Math.Round(((dataPtr_aux - widthstep)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + widthstep)[2] * 2 + (dataPtr_aux - widthstep + nChan)[2] + (dataPtr_aux + nChan)[2] + (dataPtr_aux + widthstep + nChan)[2]) / 9.0);
+                }
+                //right line: x = width
+                for (y = 1; y < height - 1; y++)
+                {
+                    dataPtr_aux = (dataPtrC + y * widthstep + (width - 1) * nChan);
+                    (dataPtr + y * widthstep + (width - 1) * nChan)[0] = (byte)Math.Round(((dataPtr_aux - widthstep)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + widthstep)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0] + (dataPtr_aux - nChan)[0] + (dataPtr_aux + widthstep - nChan)[0]) / 9.0);
+                    (dataPtr + y * widthstep + (width - 1) * nChan)[1] = (byte)Math.Round(((dataPtr_aux - widthstep)[1] * 2 + dataPtr_aux[1] * 2 + (dataPtr_aux + widthstep)[1] * 2 + (dataPtr_aux - widthstep - nChan)[1] + (dataPtr_aux - nChan)[1] + (dataPtr_aux + widthstep - nChan)[1]) / 9.0);
+                    (dataPtr + y * widthstep + (width - 1) * nChan)[2] = (byte)Math.Round(((dataPtr_aux - widthstep)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + widthstep)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2] + (dataPtr_aux - nChan)[2] + (dataPtr_aux + widthstep - nChan)[2]) / 9.0);
+                }
+                */
 
                 //for center pixels
                 for (y = 1; y < height - 1; y++)
@@ -663,6 +720,102 @@ namespace SS_OpenCV
                         green = (int)Math.Round((green + offset) / matrixWeight);
                         red = (int)Math.Round((red + offset) / matrixWeight);
 
+                        //limit the values
+                        if (red < 0)
+                            red = 0;
+                        if (red > 255)
+                            red = 255;
+                        if (green < 0)
+                            green = 0;
+                        if (green > 255)
+                            green = 255;
+                        if (blue < 0)
+                            blue = 0;
+                        if (blue > 255)
+                            blue = 255;
+
+                        //put in location
+                        (dataPtr + y * widthstep + x * nChan)[0] = (byte)blue;
+                        (dataPtr + y * widthstep + x * nChan)[1] = (byte)green;
+                        (dataPtr + y * widthstep + x * nChan)[2] = (byte)red;
+                    }
+                }
+            }
+        }
+        public static void Sobel(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy)
+        {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                MIplImage mc = imgCopy.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                byte* dataPtrC = (byte*)mc.imageData.ToPointer();
+
+                byte* dataPtr_aux = null;
+
+                int w = img.Width;
+                int h = img.Height;
+                int nChan = m.nChannels;
+                int widthstep = m.widthStep;
+                int padding = widthstep - nChan * w;
+                int x, y;
+                int red, green, blue, redx, greenx, bluex, redy, greeny, bluey;
+                int[] arr = new int[] { 1, 2, 1 };
+
+                //for center pixels
+                for (y = 1; y < h - 1; y++)
+                {
+                    for (x = 1; x < w - 1; x++)
+                    {
+                        dataPtr_aux = dataPtrC + y * widthstep + x * nChan;
+                        redx = 0;
+                        greenx = 0;
+                        bluex = 0;
+                        bluey = 0;
+                        greeny = 0;
+                        redy = 0;
+
+                        //Sx = (a+2d+g)-(c+2f+i) with y+1 and y-1
+                        for (int i = -1; i < 2; i++)
+                        {
+                            for (int j = -1; j < 2; j++)
+                            {
+                                if (j != 0)
+                                {
+                                    bluex += (int)((dataPtr_aux + i * widthstep + j * nChan)[0] * -j * arr[i + 1]);
+                                    greenx += (int)((dataPtr_aux + i * widthstep + j * nChan)[1] * -j * arr[i + 1]);
+                                    redx += (int)((dataPtr_aux + i * widthstep + j * nChan)[2] * -j * arr[i + 1]);
+                                }
+                            }
+                        }
+
+                        //Sy = (g+2h+i)-(a+2b+c) with x+1 and x-1
+                        for (int i = -1; i < 2; i++)
+                        {
+                            for (int j = -1; j < 2; j++)
+                            {
+                                if (j != 0)
+                                {
+                                    bluey += (int)((dataPtr_aux + i * widthstep + i * nChan)[0] * j * arr[i + 1]);
+                                    greeny += (int)((dataPtr_aux + j * widthstep + i * nChan)[1] * j * arr[i + 1]);
+                                    redy += (int)((dataPtr_aux + j * widthstep + i * nChan)[2] * j * arr[i + 1]);
+                                }
+                            }
+                        }
+
+                        blue = Math.Abs(bluex) + Math.Abs(bluey);
+                        green= Math.Abs(greenx) + Math.Abs(greeny);
+                        red = Math.Abs(redx) + Math.Abs(redy);
+
+                        if (red > 255)
+                            red = 255;
+                        if (green > 255)
+                            green = 255;
+                        if (blue > 255)
+                            blue = 255;
+                        
+
                         //put in location
                         (dataPtr + y * widthstep + x * nChan)[0] = (byte)blue;
                         (dataPtr + y * widthstep + x * nChan)[1] = (byte)green;
@@ -672,6 +825,26 @@ namespace SS_OpenCV
             }
         }
 
+        public static void Diferentiation(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy)
+        {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                MIplImage mc = imgCopy.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                byte* dataPtrC = (byte*)mc.imageData.ToPointer();
 
+                byte* dataPtr_aux = null;
+
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels;
+                int widthstep = m.widthStep;
+                int padding = widthstep - nChan * width;
+                int x, y;
+                int red, green, blue;
+            }
+        }
     }
 }
