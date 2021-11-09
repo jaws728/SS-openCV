@@ -538,8 +538,8 @@ namespace SS_OpenCV
                 //x = width and y = height
                 dataPtr_aux = (dataPtrC + (height - 1) * widthstep + (width - 1) * nChan);
                 (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[0] = (byte)Math.Round((dataPtr_aux[0] * 4 + (dataPtr_aux - widthstep)[0] * 2 + (dataPtr_aux - nChan)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0]) / 9.0);
-                (dataPtr + (height - 1) * widthstep + width * nChan)[1] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux - widthstep)[1] * 2 + (dataPtr_aux - nChan)[1] * 2 + (dataPtr_aux - widthstep - nChan)[1]) / 9.0);
-                (dataPtr + (height - 1) * widthstep + width * nChan)[2] = (byte)Math.Round((dataPtr_aux[2] * 4 + (dataPtr_aux - widthstep)[2] * 2 + (dataPtr_aux - nChan)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2]) / 9.0);
+                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[1] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux - widthstep)[1] * 2 + (dataPtr_aux - nChan)[1] * 2 + (dataPtr_aux - widthstep - nChan)[1]) / 9.0);
+                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[2] = (byte)Math.Round((dataPtr_aux[2] * 4 + (dataPtr_aux - widthstep)[2] * 2 + (dataPtr_aux - nChan)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2]) / 9.0);
                 //x = width and y = 0
                 dataPtr_aux = (dataPtrC + (width - 1) * nChan); 
                 (dataPtr + (width - 1) * nChan)[0] = (byte)Math.Round((dataPtr_aux[0] * 4 + (dataPtr_aux + widthstep)[0] * 2 + (dataPtr_aux - nChan)[0] * 2 + (dataPtr_aux + widthstep - nChan)[0]) / 9.0);
@@ -548,7 +548,7 @@ namespace SS_OpenCV
                 
                 //2 - for border other cases
                 //line top: y = 0
-                for (x = 1; x < width - 2; x++)
+                for (x = 1; x < width - 1; x++)
                 {
                     dataPtr_aux = (dataPtrC + x * nChan);
                     (dataPtr + x * nChan)[0] = (byte)Math.Round(((dataPtr_aux - nChan)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + nChan)[0] * 2 + (dataPtr_aux + widthstep - nChan)[0] + (dataPtr_aux + widthstep)[0] + (dataPtr_aux + widthstep + nChan)[0]) / 9.0);
@@ -556,7 +556,7 @@ namespace SS_OpenCV
                     (dataPtr + x * nChan)[2] = (byte)Math.Round(((dataPtr_aux - nChan)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + nChan)[2] * 2 + (dataPtr_aux + widthstep - nChan)[2] + (dataPtr_aux + widthstep)[2] + (dataPtr_aux + widthstep + nChan)[2]) / 9.0);
                 }
                 //bottom line: y = height
-                for (x = 1; x < width - 2; x++)
+                for (x = 1; x < width - 1; x++)
                 {
                     dataPtr_aux = (dataPtrC + (height - 1) * widthstep + x * nChan);
                     (dataPtr + (height - 1) * widthstep + x * nChan)[0] = (byte)Math.Round(((dataPtr_aux - nChan)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + nChan)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0] + (dataPtr_aux - widthstep)[0] + (dataPtr_aux - widthstep + nChan)[0]) / 9.0);
@@ -564,7 +564,7 @@ namespace SS_OpenCV
                     (dataPtr + (height - 1) * widthstep + x * nChan)[2] = (byte)Math.Round(((dataPtr_aux - nChan)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + nChan)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2] + (dataPtr_aux - widthstep)[2] + (dataPtr_aux - widthstep + nChan)[2]) / 9.0);
                 }
                 //left line: x = 0
-                for (y = 1; y < height - 2; y++)
+                for (y = 1; y < height - 1; y++)
                 { 
                     dataPtr_aux = (dataPtrC + y * widthstep);
                     (dataPtr + y * widthstep)[0] = (byte)Math.Round(((dataPtr_aux - widthstep)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + widthstep)[0] * 2 + (dataPtr_aux - widthstep + nChan)[0] + (dataPtr_aux + nChan)[0] + (dataPtr_aux + widthstep + nChan)[0]) / 9.0);
@@ -572,7 +572,7 @@ namespace SS_OpenCV
                     (dataPtr + y * widthstep)[2] = (byte)Math.Round(((dataPtr_aux - widthstep)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + widthstep)[2] * 2 + (dataPtr_aux - widthstep + nChan)[2] + (dataPtr_aux + nChan)[2] + (dataPtr_aux + widthstep + nChan)[2]) / 9.0);
                 }
                 //right line: x = width
-                for (y = 1; y < height - 2; y++)
+                for (y = 1; y < height - 1; y++)
                 {
                     dataPtr_aux = (dataPtrC + y * widthstep + (width - 1) * nChan);
                     (dataPtr + y * widthstep + (width - 1) * nChan)[0] = (byte)Math.Round(((dataPtr_aux - widthstep)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + widthstep)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0] + (dataPtr_aux - nChan)[0] + (dataPtr_aux + widthstep - nChan)[0]) / 9.0);
@@ -581,9 +581,9 @@ namespace SS_OpenCV
                 }
                 
                 //for center pixels
-                for (y = 2; y < height - 2; y++)
+                for (y = 1; y < height - 1; y++)
                 {
-                    for (x = 2; x < width - 2; x++)
+                    for (x = 1; x < width - 1; x++)
                     {
                         dataPtr_aux = (dataPtrC + y * widthstep + x * nChan);
 
@@ -635,69 +635,68 @@ namespace SS_OpenCV
                 int x, y;
                 int red, green, blue;
 
-                /*
+                
                 //for border pixels
                 //1 - for particular cases: border points
                 //x = y = 0
-                dataPtr[0] = (byte)Math.Round((dataPtrC[0] * 4 + (dataPtrC + widthstep)[0] * 2 + (dataPtrC + nChan)[0] * 2 + (dataPtrC + widthstep + nChan)[0]) / 9.0);
-                dataPtr[1] = (byte)Math.Round((dataPtrC[1] * 4 + (dataPtrC + widthstep)[1] * 2 + (dataPtrC + nChan)[1] * 2 + (dataPtrC + widthstep + nChan)[1]) / 9.0);
-                dataPtr[2] = (byte)Math.Round((dataPtrC[2] * 4 + (dataPtrC + widthstep)[2] * 2 + (dataPtrC + nChan)[2] * 2 + (dataPtrC + widthstep + nChan)[2]) / 9.0);
+                dataPtr[0] = (byte)Math.Round(((dataPtrC[0] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[0] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[0] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[0] * matrix[2, 2]) + offset) / matrixWeight);
+                dataPtr[1] = (byte)Math.Round(((dataPtrC[1] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[1] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[1] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[1] * matrix[2, 2]) + offset) / matrixWeight);
+                dataPtr[2] = (byte)Math.Round(((dataPtrC[2] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[2] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[2] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[2] * matrix[2, 2]) + offset) / matrixWeight);
                 //x = 0 and y = height
                 dataPtr_aux = (dataPtrC + (height - 1) * widthstep);
-                (dataPtr + (height - 1) * widthstep)[0] = (byte)Math.Round((dataPtr_aux[0] * 4 + (dataPtr_aux - widthstep)[0] * 2 + (dataPtr_aux + nChan)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0]) / 9.0);
-                (dataPtr + (height - 1) * widthstep)[1] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux - widthstep)[1] * 2 + (dataPtr_aux + nChan)[1] * 2 + (dataPtr_aux - widthstep - nChan)[1]) / 9.0);
-                (dataPtr + (height - 1) * widthstep)[2] = (byte)Math.Round((dataPtr_aux[2] * 4 + (dataPtr_aux - widthstep)[2] * 2 + (dataPtr_aux + nChan)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2]) / 9.0);
+                (dataPtr + (height - 1) * widthstep)[0] = (byte)Math.Round(((dataPtr_aux[0] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[0] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[0] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[2, 0])) + offset / matrixWeight);
+                (dataPtr + (height - 1) * widthstep)[1] = (byte)Math.Round(((dataPtr_aux[1] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[1] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[1] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[2, 0])) + offset / matrixWeight);
+                (dataPtr + (height - 1) * widthstep)[2] = (byte)Math.Round(((dataPtr_aux[2] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[2] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[2] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[2, 0])) + offset / matrixWeight);
                 //x = width and y = height
                 dataPtr_aux = (dataPtrC + (height - 1) * widthstep + (width - 1) * nChan);
-                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[0] = (byte)Math.Round((dataPtr_aux[0] * 4 + (dataPtr_aux - widthstep)[0] * 2 + (dataPtr_aux - nChan)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0]) / 9.0);
-                (dataPtr + (height - 1) * widthstep + width * nChan)[1] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux - widthstep)[1] * 2 + (dataPtr_aux - nChan)[1] * 2 + (dataPtr_aux - widthstep - nChan)[1]) / 9.0);
-                (dataPtr + (height - 1) * widthstep + width * nChan)[2] = (byte)Math.Round((dataPtr_aux[2] * 4 + (dataPtr_aux - widthstep)[2] * 2 + (dataPtr_aux - nChan)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2]) / 9.0);
+                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[0] = (byte)Math.Round(((dataPtr_aux[0] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[0] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[0] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0])) + offset / matrixWeight);
+                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[1] = (byte)Math.Round(((dataPtr_aux[1] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[1] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[1] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0])) + offset / matrixWeight);
+                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[2] = (byte)Math.Round(((dataPtr_aux[2] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[2] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[2] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0])) + offset / matrixWeight);
                 //x = width and y = 0
                 dataPtr_aux = (dataPtrC + (width - 1) * nChan);
-                (dataPtr + (width - 1) * nChan)[0] = (byte)Math.Round((dataPtr_aux[0] * 4 + (dataPtr_aux + widthstep)[0] * 2 + (dataPtr_aux - nChan)[0] * 2 + (dataPtr_aux + widthstep - nChan)[0]) / 9.0);
-                (dataPtr + (width - 1) * nChan)[1] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux + widthstep)[1] * 2 + (dataPtr_aux - nChan)[1] * 2 + (dataPtr_aux + widthstep - nChan)[1]) / 9.0);
-                (dataPtr + (width - 1) * nChan)[2] = (byte)Math.Round((dataPtr_aux[1] * 4 + (dataPtr_aux + widthstep)[2] * 2 + (dataPtr_aux - nChan)[2] * 2 + (dataPtr_aux + widthstep - nChan)[2]) / 9.0);
-                */
-                /*
+                (dataPtr + (width - 1) * nChan)[0] = (byte)Math.Round(((dataPtr_aux[0] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[0] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2])) + offset / matrixWeight);
+                (dataPtr + (width - 1) * nChan)[1] = (byte)Math.Round(((dataPtr_aux[1] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[1] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2])) + offset / matrixWeight);
+                (dataPtr + (width - 1) * nChan)[2] = (byte)Math.Round(((dataPtr_aux[1] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[2] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2])) + offset / matrixWeight);
+                
+                
                 //2 - for border other cases
                 //line top: y = 0
                 for (x = 1; x < width - 1; x++)
                 {
                     dataPtr_aux = (dataPtrC + x * nChan);
-                    (dataPtr + x * nChan)[0] = (byte)Math.Round(((dataPtr_aux - nChan)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + nChan)[0] * 2 + (dataPtr_aux + widthstep - nChan)[0] + (dataPtr_aux + widthstep)[0] + (dataPtr_aux + widthstep + nChan)[0]) / 9.0);
-                    (dataPtr + x * nChan)[1] = (byte)Math.Round(((dataPtr_aux - nChan)[1] * 2 + dataPtr_aux[1] * 2 + (dataPtr_aux + nChan)[1] * 2 + (dataPtr_aux + widthstep - nChan)[1] + (dataPtr_aux + widthstep)[1] + (dataPtr_aux + widthstep + nChan)[1]) / 9.0);
-                    (dataPtr + x * nChan)[2] = (byte)Math.Round(((dataPtr_aux - nChan)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + nChan)[2] * 2 + (dataPtr_aux + widthstep - nChan)[2] + (dataPtr_aux + widthstep)[2] + (dataPtr_aux + widthstep + nChan)[2]) / 9.0);
+                    (dataPtr + x * nChan)[0] = (byte)Math.Round((((dataPtr_aux - nChan)[0] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[0] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[0] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2] + (dataPtr_aux + widthstep)[0] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[0] * matrix[2, 2])) + offset / matrixWeight);
+                    (dataPtr + x * nChan)[1] = (byte)Math.Round((((dataPtr_aux - nChan)[1] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[1] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[1] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2] + (dataPtr_aux + widthstep)[1] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[1] * matrix[2, 2])) + offset / matrixWeight);
+                    (dataPtr + x * nChan)[2] = (byte)Math.Round((((dataPtr_aux - nChan)[2] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[2] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[2] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2] + (dataPtr_aux + widthstep)[2] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[2] * matrix[2, 2])) + offset / matrixWeight);
                 }
                 //bottom line: y = height
                 for (x = 1; x < width - 1; x++)
                 {
                     dataPtr_aux = (dataPtrC + (height - 1) * widthstep + x * nChan);
-                    (dataPtr + (height - 1) * widthstep + x * nChan)[0] = (byte)Math.Round(((dataPtr_aux - nChan)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + nChan)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0] + (dataPtr_aux - widthstep)[0] + (dataPtr_aux - widthstep + nChan)[0]) / 9.0);
-                    (dataPtr + (height - 1) * widthstep + x * nChan)[1] = (byte)Math.Round(((dataPtr_aux - nChan)[1] * 2 + dataPtr_aux[1] * 2 + (dataPtr_aux + nChan)[1] * 2 + (dataPtr_aux - widthstep - nChan)[1] + (dataPtr_aux - widthstep)[1] + (dataPtr_aux - widthstep + nChan)[1]) / 9.0);
-                    (dataPtr + (height - 1) * widthstep + x * nChan)[2] = (byte)Math.Round(((dataPtr_aux - nChan)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + nChan)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2] + (dataPtr_aux - widthstep)[2] + (dataPtr_aux - widthstep + nChan)[2]) / 9.0);
+                    (dataPtr + (height - 1) * widthstep + x * nChan)[0] = (byte)Math.Round((((dataPtr_aux - nChan)[0] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[0] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[0] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0] + (dataPtr_aux - widthstep)[0] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[0] * matrix[2, 0])) + offset /matrixWeight);
+                    (dataPtr + (height - 1) * widthstep + x * nChan)[1] = (byte)Math.Round((((dataPtr_aux - nChan)[1] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[1] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[1] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0] + (dataPtr_aux - widthstep)[1] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[1] * matrix[2, 0])) + offset /matrixWeight);
+                    (dataPtr + (height - 1) * widthstep + x * nChan)[2] = (byte)Math.Round((((dataPtr_aux - nChan)[2] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[2] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[2] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0] + (dataPtr_aux - widthstep)[2] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[2] * matrix[2, 0])) + offset /matrixWeight);
                 }
                 //left line: x = 0
                 for (y = 1; y < height - 1; y++)
                 {
                     dataPtr_aux = (dataPtrC + y * widthstep);
-                    (dataPtr + y * widthstep)[0] = (byte)Math.Round(((dataPtr_aux - widthstep)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + widthstep)[0] * 2 + (dataPtr_aux - widthstep + nChan)[0] + (dataPtr_aux + nChan)[0] + (dataPtr_aux + widthstep + nChan)[0]) / 9.0);
-                    (dataPtr + y * widthstep)[1] = (byte)Math.Round(((dataPtr_aux - widthstep)[1] * 2 + dataPtr_aux[1] * 2 + (dataPtr_aux + widthstep)[1] * 2 + (dataPtr_aux - widthstep + nChan)[1] + (dataPtr_aux + nChan)[1] + (dataPtr_aux + widthstep + nChan)[1]) / 9.0);
-                    (dataPtr + y * widthstep)[2] = (byte)Math.Round(((dataPtr_aux - widthstep)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + widthstep)[2] * 2 + (dataPtr_aux - widthstep + nChan)[2] + (dataPtr_aux + nChan)[2] + (dataPtr_aux + widthstep + nChan)[2]) / 9.0);
+                    (dataPtr + y * widthstep)[0] = (byte)Math.Round((((dataPtr_aux - widthstep)[0] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[0] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[0] * matrix[2, 0] + (dataPtr_aux + nChan)[0] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[0] * matrix[2, 2])) + offset / matrixWeight);
+                    (dataPtr + y * widthstep)[1] = (byte)Math.Round((((dataPtr_aux - widthstep)[1] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[1] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[1] * matrix[2, 0] + (dataPtr_aux + nChan)[1] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[1] * matrix[2, 2])) + offset / matrixWeight);
+                    (dataPtr + y * widthstep)[2] = (byte)Math.Round((((dataPtr_aux - widthstep)[2] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[2] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[2] * matrix[2, 0] + (dataPtr_aux + nChan)[2] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[2] * matrix[2, 2])) + offset / matrixWeight);
                 }
                 //right line: x = width
                 for (y = 1; y < height - 1; y++)
                 {
                     dataPtr_aux = (dataPtrC + y * widthstep + (width - 1) * nChan);
-                    (dataPtr + y * widthstep + (width - 1) * nChan)[0] = (byte)Math.Round(((dataPtr_aux - widthstep)[0] * 2 + dataPtr_aux[0] * 2 + (dataPtr_aux + widthstep)[0] * 2 + (dataPtr_aux - widthstep - nChan)[0] + (dataPtr_aux - nChan)[0] + (dataPtr_aux + widthstep - nChan)[0]) / 9.0);
-                    (dataPtr + y * widthstep + (width - 1) * nChan)[1] = (byte)Math.Round(((dataPtr_aux - widthstep)[1] * 2 + dataPtr_aux[1] * 2 + (dataPtr_aux + widthstep)[1] * 2 + (dataPtr_aux - widthstep - nChan)[1] + (dataPtr_aux - nChan)[1] + (dataPtr_aux + widthstep - nChan)[1]) / 9.0);
-                    (dataPtr + y * widthstep + (width - 1) * nChan)[2] = (byte)Math.Round(((dataPtr_aux - widthstep)[2] * 2 + dataPtr_aux[2] * 2 + (dataPtr_aux + widthstep)[2] * 2 + (dataPtr_aux - widthstep - nChan)[2] + (dataPtr_aux - nChan)[2] + (dataPtr_aux + widthstep - nChan)[2]) / 9.0);
+                    (dataPtr + y * widthstep + (width - 1) * nChan)[0] = (byte)Math.Round((((dataPtr_aux - widthstep)[0] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[0] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0] + (dataPtr_aux - nChan)[0] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2])) + offset / matrixWeight);
+                    (dataPtr + y * widthstep + (width - 1) * nChan)[1] = (byte)Math.Round((((dataPtr_aux - widthstep)[1] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[1] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0] + (dataPtr_aux - nChan)[1] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2])) + offset / matrixWeight);
+                    (dataPtr + y * widthstep + (width - 1) * nChan)[2] = (byte)Math.Round((((dataPtr_aux - widthstep)[2] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[2] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0] + (dataPtr_aux - nChan)[2] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2])) + offset / matrixWeight);
                 }
-                */
 
                 //for center pixels
-                for (y = 2; y < height - 2; y++)
+                for (y = 2; y < height - 1; y++)
                 {
-                    for (x = 2; x < width - 2; x++)
+                    for (x = 2; x < width - 1; x++)
                     {
                         dataPtr_aux = dataPtrC + y * widthstep + x * nChan;
                         red = 0;
