@@ -13,17 +13,17 @@ namespace SS_OpenCV
 {
     public partial class HistogramForm : Form
     {
-        public HistogramForm(int [] array)
+        public HistogramForm(int [,] matrix)
         {
             InitializeComponent();
 
             DataPointCollection list1 = chart1.Series[0].Points;
-
+            /*
             for (int i=0; i<array.Length; i++)
             {
                 list1.AddXY(i,array[i]);
             }
-
+            */
             chart1.Series[0].Color = Color.Gray;
             chart1.ChartAreas[0].AxisX.Maximum = 255;
             chart1.ChartAreas[0].AxisX.Minimum = 0;

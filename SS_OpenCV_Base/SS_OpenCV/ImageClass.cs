@@ -638,9 +638,9 @@ namespace SS_OpenCV
                 //for border pixels
                 //1 - for particular cases: border points
                 //x = y = 0
-                blue = (int)Math.Round(((dataPtrC[0] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[0] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[0] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[0] * matrix[2, 2]) + offset) / matrixWeight);
-                green = (int)Math.Round(((dataPtrC[1] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[1] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[1] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[1] * matrix[2, 2]) + offset) / matrixWeight);
-                red = (int)Math.Round(((dataPtrC[2] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[2] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[2] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[2] * matrix[2, 2]) + offset) / matrixWeight);
+                blue = (int)Math.Round(((dataPtrC[0] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[0] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[0] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[0] * matrix[2, 2]) / matrixWeight) + offset);
+                green = (int)Math.Round(((dataPtrC[1] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[1] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[1] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[1] * matrix[2, 2]) / matrixWeight) + offset);
+                red = (int)Math.Round(((dataPtrC[2] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[2] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[2] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[2] * matrix[2, 2]) / matrixWeight) + offset);
 
                 //limit the values
                 if (red < 0)
@@ -662,9 +662,9 @@ namespace SS_OpenCV
                 
                 //x = 0 and y = height
                 dataPtr_aux = (dataPtrC + (height - 1) * widthstep);
-                blue = (int)Math.Round(((dataPtr_aux[0] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[0] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[0] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[2, 0])) + offset / matrixWeight);
-                green = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[1] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[1] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[2, 0])) + offset / matrixWeight);
-                red = (int)Math.Round(((dataPtr_aux[2] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[2] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[2] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[2, 0])) + offset / matrixWeight);
+                blue = (int)Math.Round(((dataPtr_aux[0] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[0] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[0] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[2, 0]) / matrixWeight) + offset);
+                green = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[1] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[1] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[2, 0]) / matrixWeight) + offset);
+                red = (int)Math.Round(((dataPtr_aux[2] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[2] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[2] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[2, 0]) / matrixWeight) + offset);
 
                 //limit the values
                 if (red < 0)
@@ -686,9 +686,9 @@ namespace SS_OpenCV
 
                 //x = width and y = height
                 dataPtr_aux = (dataPtrC + (height - 1) * widthstep + (width - 1) * nChan);
-                blue = (int)Math.Round(((dataPtr_aux[0] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[0] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[0] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0])) + offset / matrixWeight);
-                green = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[1] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[1] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0])) + offset / matrixWeight);
-                red = (int)Math.Round(((dataPtr_aux[2] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[2] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[2] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0])) + offset / matrixWeight);
+                blue = (int)Math.Round(((dataPtr_aux[0] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[0] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[0] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0]) / matrixWeight) + offset);
+                green = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[1] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[1] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0]) / matrixWeight) + offset);
+                red = (int)Math.Round(((dataPtr_aux[2] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[2] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[2] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0]) / matrixWeight) + offset);
 
                 //limit the values
                 if (red < 0)
@@ -710,9 +710,9 @@ namespace SS_OpenCV
 
                 //x = width and y = 0
                 dataPtr_aux = (dataPtrC + (width - 1) * nChan);
-                blue = (int)Math.Round(((dataPtr_aux[0] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[0] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2])) + offset / matrixWeight);
-                green = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[1] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2])) + offset / matrixWeight);
-                red = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[2] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2])) + offset / matrixWeight);
+                blue = (int)Math.Round(((dataPtr_aux[0] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[0] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2]) / matrixWeight) + offset);
+                green = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[1] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2]) / matrixWeight) + offset);
+                red = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[2] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2]) / matrixWeight) + offset);
 
                 //limit the values
                 if (red < 0)
@@ -737,9 +737,9 @@ namespace SS_OpenCV
                 for (x = 1; x < width - 1; x++)
                 {
                     dataPtr_aux = (dataPtrC + x * nChan);
-                    blue = (int)Math.Round((((dataPtr_aux - nChan)[0] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[0] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[0] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2] + (dataPtr_aux + widthstep)[0] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[0] * matrix[2, 2])) + offset / matrixWeight);
-                    green = (int)Math.Round((((dataPtr_aux - nChan)[1] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[1] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[1] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2] + (dataPtr_aux + widthstep)[1] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[1] * matrix[2, 2])) + offset / matrixWeight);
-                    red = (int)Math.Round((((dataPtr_aux - nChan)[2] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[2] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[2] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2] + (dataPtr_aux + widthstep)[2] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[2] * matrix[2, 2])) + offset / matrixWeight);
+                    blue = (int)Math.Round((((dataPtr_aux - nChan)[0] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[0] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[0] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2] + (dataPtr_aux + widthstep)[0] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[0] * matrix[2, 2]) / matrixWeight) + offset);
+                    green = (int)Math.Round((((dataPtr_aux - nChan)[1] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[1] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[1] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2] + (dataPtr_aux + widthstep)[1] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[1] * matrix[2, 2]) / matrixWeight) + offset);
+                    red = (int)Math.Round((((dataPtr_aux - nChan)[2] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[2] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[2] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2] + (dataPtr_aux + widthstep)[2] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[2] * matrix[2, 2]) / matrixWeight) + offset);
 
                     //limit the values
                     if (red < 0)
@@ -763,9 +763,9 @@ namespace SS_OpenCV
                 for (x = 1; x < width - 1; x++)
                 {
                     dataPtr_aux = (dataPtrC + (height - 1) * widthstep + x * nChan);
-                    blue = (int)Math.Round((((dataPtr_aux - nChan)[0] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[0] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[0] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0] + (dataPtr_aux - widthstep)[0] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[0] * matrix[2, 0])) + offset /matrixWeight);
-                    green = (int)Math.Round((((dataPtr_aux - nChan)[1] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[1] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[1] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0] + (dataPtr_aux - widthstep)[1] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[1] * matrix[2, 0])) + offset /matrixWeight);
-                    red = (int)Math.Round((((dataPtr_aux - nChan)[2] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[2] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[2] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0] + (dataPtr_aux - widthstep)[2] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[2] * matrix[2, 0])) + offset /matrixWeight);
+                    blue = (int)Math.Round((((dataPtr_aux - nChan)[0] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[0] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[0] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0] + (dataPtr_aux - widthstep)[0] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[0] * matrix[2, 0]) /matrixWeight) + offset);
+                    green = (int)Math.Round((((dataPtr_aux - nChan)[1] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[1] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[1] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0] + (dataPtr_aux - widthstep)[1] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[1] * matrix[2, 0]) /matrixWeight) + offset);
+                    red = (int)Math.Round((((dataPtr_aux - nChan)[2] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[2] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[2] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0] + (dataPtr_aux - widthstep)[2] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[2] * matrix[2, 0]) /matrixWeight) + offset);
 
                     //limit the values
                     if (red < 0)
@@ -789,9 +789,9 @@ namespace SS_OpenCV
                 for (y = 1; y < height - 1; y++)
                 {
                     dataPtr_aux = (dataPtrC + y * widthstep);
-                    blue = (int)Math.Round((((dataPtr_aux - widthstep)[0] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[0] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[0] * matrix[2, 0] + (dataPtr_aux + nChan)[0] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[0] * matrix[2, 2])) + offset / matrixWeight);
-                    green = (int)Math.Round((((dataPtr_aux - widthstep)[1] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[1] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[1] * matrix[2, 0] + (dataPtr_aux + nChan)[1] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[1] * matrix[2, 2])) + offset / matrixWeight);
-                    red = (int)Math.Round((((dataPtr_aux - widthstep)[2] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[2] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[2] * matrix[2, 0] + (dataPtr_aux + nChan)[2] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[2] * matrix[2, 2])) + offset / matrixWeight);
+                    blue = (int)Math.Round((((dataPtr_aux - widthstep)[0] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[0] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[0] * matrix[2, 0] + (dataPtr_aux + nChan)[0] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[0] * matrix[2, 2]) / matrixWeight) + offset);
+                    green = (int)Math.Round((((dataPtr_aux - widthstep)[1] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[1] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[1] * matrix[2, 0] + (dataPtr_aux + nChan)[1] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[1] * matrix[2, 2]) / matrixWeight) + offset);
+                    red = (int)Math.Round((((dataPtr_aux - widthstep)[2] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[2] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[2] * matrix[2, 0] + (dataPtr_aux + nChan)[2] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[2] * matrix[2, 2]) / matrixWeight) + offset);
 
                     //limit the values
                     if (red < 0)
@@ -815,9 +815,9 @@ namespace SS_OpenCV
                 for (y = 1; y < height - 1; y++)
                 {
                     dataPtr_aux = (dataPtrC + y * widthstep + (width - 1) * nChan);
-                    blue = (int)Math.Round((((dataPtr_aux - widthstep)[0] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[0] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0] + (dataPtr_aux - nChan)[0] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2])) + offset / matrixWeight);
-                    green = (int)Math.Round((((dataPtr_aux - widthstep)[1] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[1] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0] + (dataPtr_aux - nChan)[1] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2])) + offset / matrixWeight);
-                    red = (int)Math.Round((((dataPtr_aux - widthstep)[2] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[2] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0] + (dataPtr_aux - nChan)[2] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2])) + offset / matrixWeight);
+                    blue = (int)Math.Round((((dataPtr_aux - widthstep)[0] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[0] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0] + (dataPtr_aux - nChan)[0] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2]) / matrixWeight) + offset);
+                    green = (int)Math.Round((((dataPtr_aux - widthstep)[1] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[1] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0] + (dataPtr_aux - nChan)[1] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2]) / matrixWeight) + offset);
+                    red = (int)Math.Round((((dataPtr_aux - widthstep)[2] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[2] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0] + (dataPtr_aux - nChan)[2] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2]) / matrixWeight) + offset);
 
                     //limit the values
                     if (red < 0)
@@ -839,9 +839,9 @@ namespace SS_OpenCV
                 }
 
                 //for center pixels
-                for (y = 2; y < height - 1; y++)
+                for (y = 1; y < height - 1; y++)
                 {
-                    for (x = 2; x < width - 1; x++)
+                    for (x = 1; x < width - 1; x++)
                     {
                         dataPtr_aux = dataPtrC + y * widthstep + x * nChan;
                         red = 0;
@@ -860,9 +860,9 @@ namespace SS_OpenCV
                         }
 
                         //divide by total weight
-                        blue = (int)Math.Round((blue + offset) / matrixWeight);
-                        green = (int)Math.Round((green + offset) / matrixWeight);
-                        red = (int)Math.Round((red + offset) / matrixWeight);
+                        blue = (int)Math.Round((blue / matrixWeight) + offset);
+                        green = (int)Math.Round((green / matrixWeight) + offset);
+                        red = (int)Math.Round((red / matrixWeight) + offset);
 
                         //limit the values
                         if (red < 0)
@@ -1062,5 +1062,101 @@ namespace SS_OpenCV
                 //bonus: implemetation by us
             }
         }
+
+        public static int[] Histogram_Gray(Image<Bgr, byte> img)
+        {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels;
+                int widthstep = m.widthStep;
+                int x, y, gray;
+                int[] array = new int[256];
+
+                for (x= 0; x < width; x++)
+                {
+                    for (y= 0; y < height; y++)
+                    {
+                        gray = (int)Math.Round(((dataPtr + y * widthstep + x * nChan)[0] + (dataPtr + y * widthstep + x * nChan)[1] + (dataPtr + y * widthstep + x * nChan)[2]) / 3.0);
+
+                        if (gray > 255)
+                            gray = 255;
+
+                        array[gray] += 1;
+                    }
+                }
+                return array;
+            }
+        }
+
+        public static int[,] Histogram_RGB(Emgu.CV.Image<Bgr, byte> img)
+        {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels;
+                int widthstep = m.widthStep;
+                int x, y;
+                int[,] matrix = new int[3, 256];
+
+                for (x = 0; x < width; x++)
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        matrix[0, (int)(dataPtr + y * widthstep + x * nChan)[0]] += 1;
+                        matrix[1, (int)(dataPtr + y * widthstep + x * nChan)[1]] += 1;
+                        matrix[2, (int)(dataPtr + y * widthstep + x * nChan)[2]] += 1;
+                    }
+                }
+                return matrix;
+            }
+        }
+
+        public static int[,] Histogram_All(Emgu.CV.Image<Bgr, byte> img)
+        {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels;
+                int widthstep = m.widthStep;
+                int x, y, gray;
+                int[,] matrix = new int[4, 256];
+
+                for (x = 0; x < width; x++)
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        gray = (int)Math.Round(((dataPtr + y * widthstep + x * nChan)[0] + (dataPtr + y * widthstep + x * nChan)[1] + (dataPtr + y * widthstep + x * nChan)[2]) / 3.0);
+
+                        if (gray > 255)
+                            gray = 255;
+
+                        matrix[0, (int)(dataPtr + y * widthstep + x * nChan)[0]] += 1;
+                        matrix[1, (int)(dataPtr + y * widthstep + x * nChan)[1]] += 1;
+                        matrix[2, (int)(dataPtr + y * widthstep + x * nChan)[2]] += 1;
+                        matrix[3, gray] += 1;
+                    }
+                }
+                return matrix;
+            }
+        }
+
+
+
     }
 }

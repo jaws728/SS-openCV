@@ -479,6 +479,52 @@ namespace SS_OpenCV
             Cursor = Cursors.Default; // normal cursor 
         }
 
+        private void histogramGrayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            int[] array = ImageClass.Histogram_Gray(img);
+            int[,] matrix = new int[1, 256];
+
+            HistogramForm form = new HistogramForm(matrix);
+            form.ShowDialog();
+
+            Cursor = Cursors.Default; // normal cursor 
+        }
+
+        private void histogramRGBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            int[,] matrix = ImageClass.Histogram_RGB(img);
+
+            HistogramForm form = new HistogramForm(matrix);
+            form.ShowDialog();
+
+            Cursor = Cursors.Default; // normal cursor 
+        }
+
+        private void histogramAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            int[,] matrix = ImageClass.Histogram_All(img);
+
+            HistogramForm form = new HistogramForm(matrix);
+            form.ShowDialog();
+
+            Cursor = Cursors.Default; // normal cursor 
+        }
+
         private void mediaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (img == null) // verify if the image is already opened
