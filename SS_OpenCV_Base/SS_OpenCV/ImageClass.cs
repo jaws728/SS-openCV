@@ -1038,7 +1038,29 @@ namespace SS_OpenCV
 
         public static void Median(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy)
         {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                MIplImage mc = imgCopy.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                byte* dataPtrC = (byte*)mc.imageData.ToPointer();
 
+                byte* dataPtr_aux = null;
+
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels;
+                int widthstep = m.widthStep;
+                int padding = widthstep - nChan * width;
+                int x, y;
+                int red, green, blue;
+
+                //calculate the median pixel: img.SmoothMedian(3).CopyTo(img);
+
+                imgCopy.SmoothMedian(3).CopyTo(img);
+                //bonus: implemetation by us
+            }
         }
     }
 }
