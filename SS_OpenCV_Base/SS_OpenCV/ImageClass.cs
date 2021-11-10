@@ -614,7 +614,6 @@ namespace SS_OpenCV
             }
         }
 
-
         public static void NonUniform(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy, float[,] matrix, float matrixWeight, float offset)
         {
             unsafe
@@ -639,58 +638,204 @@ namespace SS_OpenCV
                 //for border pixels
                 //1 - for particular cases: border points
                 //x = y = 0
-                dataPtr[0] = (byte)Math.Round(((dataPtrC[0] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[0] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[0] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[0] * matrix[2, 2]) + offset) / matrixWeight);
-                dataPtr[1] = (byte)Math.Round(((dataPtrC[1] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[1] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[1] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[1] * matrix[2, 2]) + offset) / matrixWeight);
-                dataPtr[2] = (byte)Math.Round(((dataPtrC[2] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[2] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[2] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[2] * matrix[2, 2]) + offset) / matrixWeight);
+                blue = (int)Math.Round(((dataPtrC[0] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[0] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[0] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[0] * matrix[2, 2]) + offset) / matrixWeight);
+                green = (int)Math.Round(((dataPtrC[1] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[1] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[1] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[1] * matrix[2, 2]) + offset) / matrixWeight);
+                red = (int)Math.Round(((dataPtrC[2] * (matrix[0, 0] + matrix[0, 1] + matrix[1, 0] + matrix[1, 1]) + (dataPtrC + widthstep)[2] * (matrix[0, 2] + matrix[1, 2]) + (dataPtrC + nChan)[2] * (matrix[2, 1] + matrix[2, 0]) + (dataPtrC + widthstep + nChan)[2] * matrix[2, 2]) + offset) / matrixWeight);
+
+                //limit the values
+                if (red < 0)
+                    red = 0;
+                if (red > 255)
+                    red = 255;
+                if (green < 0)
+                    green = 0;
+                if (green > 255)
+                    green = 255;
+                if (blue < 0)
+                    blue = 0;
+                if (blue > 255)
+                    blue = 255;
+
+                dataPtr[0] = (byte)blue;
+                dataPtr[1] = (byte)green;
+                dataPtr[2] = (byte)red;
+                
                 //x = 0 and y = height
                 dataPtr_aux = (dataPtrC + (height - 1) * widthstep);
-                (dataPtr + (height - 1) * widthstep)[0] = (byte)Math.Round(((dataPtr_aux[0] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[0] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[0] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[2, 0])) + offset / matrixWeight);
-                (dataPtr + (height - 1) * widthstep)[1] = (byte)Math.Round(((dataPtr_aux[1] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[1] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[1] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[2, 0])) + offset / matrixWeight);
-                (dataPtr + (height - 1) * widthstep)[2] = (byte)Math.Round(((dataPtr_aux[2] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[2] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[2] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[2, 0])) + offset / matrixWeight);
+                blue = (int)Math.Round(((dataPtr_aux[0] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[0] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[0] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[2, 0])) + offset / matrixWeight);
+                green = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[1] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[1] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[2, 0])) + offset / matrixWeight);
+                red = (int)Math.Round(((dataPtr_aux[2] * (matrix[1, 1] + matrix[0, 1] + matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep)[2] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + nChan)[2] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[2, 0])) + offset / matrixWeight);
+
+                //limit the values
+                if (red < 0)
+                    red = 0;
+                if (red > 255)
+                    red = 255;
+                if (green < 0)
+                    green = 0;
+                if (green > 255)
+                    green = 255;
+                if (blue < 0)
+                    blue = 0;
+                if (blue > 255)
+                    blue = 255;
+
+                (dataPtr + (height - 1) * widthstep)[0] = (byte)blue;
+                (dataPtr + (height - 1) * widthstep)[1] = (byte)green;
+                (dataPtr + (height - 1) * widthstep)[2] = (byte)red;
+
                 //x = width and y = height
                 dataPtr_aux = (dataPtrC + (height - 1) * widthstep + (width - 1) * nChan);
-                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[0] = (byte)Math.Round(((dataPtr_aux[0] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[0] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[0] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0])) + offset / matrixWeight);
-                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[1] = (byte)Math.Round(((dataPtr_aux[1] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[1] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[1] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0])) + offset / matrixWeight);
-                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[2] = (byte)Math.Round(((dataPtr_aux[2] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[2] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[2] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0])) + offset / matrixWeight);
+                blue = (int)Math.Round(((dataPtr_aux[0] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[0] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[0] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0])) + offset / matrixWeight);
+                green = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[1] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[1] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0])) + offset / matrixWeight);
+                red = (int)Math.Round(((dataPtr_aux[2] * (matrix[1, 1] + matrix[1, 2] + matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep)[2] * (matrix[1, 0] + matrix[2, 0]) + (dataPtr_aux - nChan)[2] * (matrix[0, 1] + matrix[0, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0])) + offset / matrixWeight);
+
+                //limit the values
+                if (red < 0)
+                    red = 0;
+                if (red > 255)
+                    red = 255;
+                if (green < 0)
+                    green = 0;
+                if (green > 255)
+                    green = 255;
+                if (blue < 0)
+                    blue = 0;
+                if (blue > 255)
+                    blue = 255;
+
+                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[0] = (byte)blue;
+                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[1] = (byte)green;
+                (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[2] = (byte)red;
+
                 //x = width and y = 0
                 dataPtr_aux = (dataPtrC + (width - 1) * nChan);
-                (dataPtr + (width - 1) * nChan)[0] = (byte)Math.Round(((dataPtr_aux[0] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[0] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2])) + offset / matrixWeight);
-                (dataPtr + (width - 1) * nChan)[1] = (byte)Math.Round(((dataPtr_aux[1] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[1] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2])) + offset / matrixWeight);
-                (dataPtr + (width - 1) * nChan)[2] = (byte)Math.Round(((dataPtr_aux[1] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[2] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2])) + offset / matrixWeight);
-                
-                
+                blue = (int)Math.Round(((dataPtr_aux[0] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[0] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2])) + offset / matrixWeight);
+                green = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[1] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2])) + offset / matrixWeight);
+                red = (int)Math.Round(((dataPtr_aux[1] * (matrix[1, 0] + matrix[2, 0] + matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - nChan)[2] * (matrix[0, 0] + matrix[1, 0]) + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2])) + offset / matrixWeight);
+
+                //limit the values
+                if (red < 0)
+                    red = 0;
+                if (red > 255)
+                    red = 255;
+                if (green < 0)
+                    green = 0;
+                if (green > 255)
+                    green = 255;
+                if (blue < 0)
+                    blue = 0;
+                if (blue > 255)
+                    blue = 255;
+
+                (dataPtr + (width - 1) * nChan)[0] = (byte)blue;
+                (dataPtr + (width - 1) * nChan)[1] = (byte)green;
+                (dataPtr + (width - 1) * nChan)[2] = (byte)red;
+
                 //2 - for border other cases
                 //line top: y = 0
                 for (x = 1; x < width - 1; x++)
                 {
                     dataPtr_aux = (dataPtrC + x * nChan);
-                    (dataPtr + x * nChan)[0] = (byte)Math.Round((((dataPtr_aux - nChan)[0] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[0] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[0] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2] + (dataPtr_aux + widthstep)[0] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[0] * matrix[2, 2])) + offset / matrixWeight);
-                    (dataPtr + x * nChan)[1] = (byte)Math.Round((((dataPtr_aux - nChan)[1] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[1] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[1] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2] + (dataPtr_aux + widthstep)[1] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[1] * matrix[2, 2])) + offset / matrixWeight);
-                    (dataPtr + x * nChan)[2] = (byte)Math.Round((((dataPtr_aux - nChan)[2] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[2] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[2] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2] + (dataPtr_aux + widthstep)[2] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[2] * matrix[2, 2])) + offset / matrixWeight);
+                    blue = (int)Math.Round((((dataPtr_aux - nChan)[0] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[0] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[0] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2] + (dataPtr_aux + widthstep)[0] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[0] * matrix[2, 2])) + offset / matrixWeight);
+                    green = (int)Math.Round((((dataPtr_aux - nChan)[1] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[1] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[1] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2] + (dataPtr_aux + widthstep)[1] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[1] * matrix[2, 2])) + offset / matrixWeight);
+                    red = (int)Math.Round((((dataPtr_aux - nChan)[2] * (matrix[0, 0] + matrix[0, 1]) + dataPtr_aux[2] * (matrix[1, 0] + matrix[1, 1]) + (dataPtr_aux + nChan)[2] * (matrix[2, 0] + matrix[2, 1]) + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2] + (dataPtr_aux + widthstep)[2] * matrix[1, 2] + (dataPtr_aux + widthstep + nChan)[2] * matrix[2, 2])) + offset / matrixWeight);
+
+                    //limit the values
+                    if (red < 0)
+                        red = 0;
+                    if (red > 255)
+                        red = 255;
+                    if (green < 0)
+                        green = 0;
+                    if (green > 255)
+                        green = 255;
+                    if (blue < 0)
+                        blue = 0;
+                    if (blue > 255)
+                        blue = 255;
+
+                    (dataPtr + x * nChan)[0] = (byte)blue;
+                    (dataPtr + x * nChan)[1] = (byte)green;
+                    (dataPtr + x * nChan)[2] = (byte)red;
                 }
                 //bottom line: y = height
                 for (x = 1; x < width - 1; x++)
                 {
                     dataPtr_aux = (dataPtrC + (height - 1) * widthstep + x * nChan);
-                    (dataPtr + (height - 1) * widthstep + x * nChan)[0] = (byte)Math.Round((((dataPtr_aux - nChan)[0] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[0] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[0] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0] + (dataPtr_aux - widthstep)[0] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[0] * matrix[2, 0])) + offset /matrixWeight);
-                    (dataPtr + (height - 1) * widthstep + x * nChan)[1] = (byte)Math.Round((((dataPtr_aux - nChan)[1] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[1] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[1] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0] + (dataPtr_aux - widthstep)[1] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[1] * matrix[2, 0])) + offset /matrixWeight);
-                    (dataPtr + (height - 1) * widthstep + x * nChan)[2] = (byte)Math.Round((((dataPtr_aux - nChan)[2] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[2] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[2] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0] + (dataPtr_aux - widthstep)[2] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[2] * matrix[2, 0])) + offset /matrixWeight);
+                    blue = (int)Math.Round((((dataPtr_aux - nChan)[0] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[0] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[0] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0] + (dataPtr_aux - widthstep)[0] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[0] * matrix[2, 0])) + offset /matrixWeight);
+                    green = (int)Math.Round((((dataPtr_aux - nChan)[1] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[1] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[1] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0] + (dataPtr_aux - widthstep)[1] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[1] * matrix[2, 0])) + offset /matrixWeight);
+                    red = (int)Math.Round((((dataPtr_aux - nChan)[2] * (matrix[0, 1] + matrix[0, 2]) + dataPtr_aux[2] * (matrix[1, 1] + matrix[1, 2]) + (dataPtr_aux + nChan)[2] * (matrix[2, 1] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0] + (dataPtr_aux - widthstep)[2] * matrix[1, 0] + (dataPtr_aux - widthstep + nChan)[2] * matrix[2, 0])) + offset /matrixWeight);
+
+                    //limit the values
+                    if (red < 0)
+                        red = 0;
+                    if (red > 255)
+                        red = 255;
+                    if (green < 0)
+                        green = 0;
+                    if (green > 255)
+                        green = 255;
+                    if (blue < 0)
+                        blue = 0;
+                    if (blue > 255)
+                        blue = 255;
+
+                    (dataPtr + (height - 1) * widthstep + x * nChan)[0] = (byte)blue;
+                    (dataPtr + (height - 1) * widthstep + x * nChan)[1] = (byte)green;
+                    (dataPtr + (height - 1) * widthstep + x * nChan)[2] = (byte)red;
                 }
                 //left line: x = 0
                 for (y = 1; y < height - 1; y++)
                 {
                     dataPtr_aux = (dataPtrC + y * widthstep);
-                    (dataPtr + y * widthstep)[0] = (byte)Math.Round((((dataPtr_aux - widthstep)[0] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[0] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[0] * matrix[2, 0] + (dataPtr_aux + nChan)[0] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[0] * matrix[2, 2])) + offset / matrixWeight);
-                    (dataPtr + y * widthstep)[1] = (byte)Math.Round((((dataPtr_aux - widthstep)[1] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[1] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[1] * matrix[2, 0] + (dataPtr_aux + nChan)[1] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[1] * matrix[2, 2])) + offset / matrixWeight);
-                    (dataPtr + y * widthstep)[2] = (byte)Math.Round((((dataPtr_aux - widthstep)[2] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[2] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[2] * matrix[2, 0] + (dataPtr_aux + nChan)[2] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[2] * matrix[2, 2])) + offset / matrixWeight);
+                    blue = (int)Math.Round((((dataPtr_aux - widthstep)[0] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[0] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[0] * matrix[2, 0] + (dataPtr_aux + nChan)[0] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[0] * matrix[2, 2])) + offset / matrixWeight);
+                    green = (int)Math.Round((((dataPtr_aux - widthstep)[1] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[1] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[1] * matrix[2, 0] + (dataPtr_aux + nChan)[1] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[1] * matrix[2, 2])) + offset / matrixWeight);
+                    red = (int)Math.Round((((dataPtr_aux - widthstep)[2] * (matrix[0, 0] + matrix[1, 0]) + dataPtr_aux[2] * (matrix[0, 1] + matrix[1, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[0, 2] + matrix[1, 2]) + (dataPtr_aux - widthstep + nChan)[2] * matrix[2, 0] + (dataPtr_aux + nChan)[2] * matrix[2, 1] + (dataPtr_aux + widthstep + nChan)[2] * matrix[2, 2])) + offset / matrixWeight);
+
+                    //limit the values
+                    if (red < 0)
+                        red = 0;
+                    if (red > 255)
+                        red = 255;
+                    if (green < 0)
+                        green = 0;
+                    if (green > 255)
+                        green = 255;
+                    if (blue < 0)
+                        blue = 0;
+                    if (blue > 255)
+                        blue = 255;
+
+                    (dataPtr + y * widthstep)[0] = (byte)blue;
+                    (dataPtr + y * widthstep)[1] = (byte)green;
+                    (dataPtr + y * widthstep)[2] = (byte)red;
                 }
                 //right line: x = width
                 for (y = 1; y < height - 1; y++)
                 {
                     dataPtr_aux = (dataPtrC + y * widthstep + (width - 1) * nChan);
-                    (dataPtr + y * widthstep + (width - 1) * nChan)[0] = (byte)Math.Round((((dataPtr_aux - widthstep)[0] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[0] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0] + (dataPtr_aux - nChan)[0] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2])) + offset / matrixWeight);
-                    (dataPtr + y * widthstep + (width - 1) * nChan)[1] = (byte)Math.Round((((dataPtr_aux - widthstep)[1] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[1] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0] + (dataPtr_aux - nChan)[1] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2])) + offset / matrixWeight);
-                    (dataPtr + y * widthstep + (width - 1) * nChan)[2] = (byte)Math.Round((((dataPtr_aux - widthstep)[2] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[2] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0] + (dataPtr_aux - nChan)[2] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2])) + offset / matrixWeight);
+                    blue = (int)Math.Round((((dataPtr_aux - widthstep)[0] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[0] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[0] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[0] * matrix[0, 0] + (dataPtr_aux - nChan)[0] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[0] * matrix[0, 2])) + offset / matrixWeight);
+                    green = (int)Math.Round((((dataPtr_aux - widthstep)[1] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[1] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[1] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[1] * matrix[0, 0] + (dataPtr_aux - nChan)[1] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[1] * matrix[0, 2])) + offset / matrixWeight);
+                    red = (int)Math.Round((((dataPtr_aux - widthstep)[2] * (matrix[1, 0] + matrix[2, 0]) + dataPtr_aux[2] * (matrix[1, 1] + matrix[2, 1]) + (dataPtr_aux + widthstep)[2] * (matrix[1, 2] + matrix[2, 2]) + (dataPtr_aux - widthstep - nChan)[2] * matrix[0, 0] + (dataPtr_aux - nChan)[2] * matrix[0, 1] + (dataPtr_aux + widthstep - nChan)[2] * matrix[0, 2])) + offset / matrixWeight);
+
+                    //limit the values
+                    if (red < 0)
+                        red = 0;
+                    if (red > 255)
+                        red = 255;
+                    if (green < 0)
+                        green = 0;
+                    if (green > 255)
+                        green = 255;
+                    if (blue < 0)
+                        blue = 0;
+                    if (blue > 255)
+                        blue = 255;
+
+                    (dataPtr + y * widthstep + (width - 1) * nChan)[0] = (byte)blue;
+                    (dataPtr + y * widthstep + (width - 1) * nChan)[1] = (byte)green;
+                    (dataPtr + y * widthstep + (width - 1) * nChan)[2] = (byte)red;
                 }
 
                 //for center pixels
@@ -796,7 +941,7 @@ namespace SS_OpenCV
                             {
                                 if (j != 0)
                                 {
-                                    bluey += (int)((dataPtr_aux + i * widthstep + i * nChan)[0] * j * arr[i + 1]);
+                                    bluey += (int)((dataPtr_aux + j * widthstep + i * nChan)[0] * j * arr[i + 1]);
                                     greeny += (int)((dataPtr_aux + j * widthstep + i * nChan)[1] * j * arr[i + 1]);
                                     redy += (int)((dataPtr_aux + j * widthstep + i * nChan)[2] * j * arr[i + 1]);
                                 }
@@ -889,6 +1034,11 @@ namespace SS_OpenCV
                 (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[1] = (byte)0;
                 (dataPtr + (height - 1) * widthstep + (width - 1) * nChan)[2] = (byte)0;
             }
+        }
+
+        public static void Median(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy)
+        {
+
         }
     }
 }
