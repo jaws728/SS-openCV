@@ -488,6 +488,10 @@ namespace SS_OpenCV
 
             int[] array = ImageClass.Histogram_Gray(img);
             int[,] matrix = new int[1, 256];
+            for (int i = 0; i < array.Length; i++)
+            {
+                matrix[0, i] = array[i];
+            }
 
             HistogramForm form = new HistogramForm(matrix);
             form.ShowDialog();
