@@ -1245,6 +1245,92 @@ namespace SS_OpenCV
             }
         }
 
+        public static void Equalization(Image<Bgr, byte> img)
+        {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels;
+                int widthstep = m.widthStep;
+                int x, y, gray;
+                int[,] matrix = new int[4, 256];
+
+                for (x = 0; x < width; x++)
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                    }
+                }
+            }
+        }
+
+
+        public static void ConvertToBW(Emgu.CV.Image<Bgr, byte> img, int threshold)
+        {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels;
+                int widthstep = m.widthStep;
+                int x, y, gray;
+                int[,] matrix = new int[4, 256];
+
+                for (x = 0; x < width; x++)
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        gray = (int)Math.Round(((dataPtr + y * widthstep + x * nChan)[0] + (dataPtr + y * widthstep + x * nChan)[1] + (dataPtr + y * widthstep + x * nChan)[2]) /3.0);
+                        if (gray > threshold)
+                        {
+                            (dataPtr + y * widthstep + x * nChan)[0] = (byte)255;
+                            (dataPtr + y * widthstep + x * nChan)[1] = (byte)255;
+                            (dataPtr + y * widthstep + x * nChan)[2] = (byte)255;
+
+                        } else
+                        {
+                            (dataPtr + y * widthstep + x * nChan)[0] = (byte)0;
+                            (dataPtr + y * widthstep + x * nChan)[1] = (byte)0;
+                            (dataPtr + y * widthstep + x * nChan)[2] = (byte)0;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void ConvertToBW_Otsu(Emgu.CV.Image<Bgr, byte> img)
+        {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels;
+                int widthstep = m.widthStep;
+                int x, y, gray;
+                int[,] matrix = new int[4, 256];
+
+                for (x = 0; x < width; x++)
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                    }
+                }
+            }
+        }
+
+
+
 
 
     }

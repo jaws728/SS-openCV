@@ -66,7 +66,7 @@ namespace SS_OpenCV
             }
             */
             
-            Color[] colorsArr = { Color.Gray, Color.Red, Color.Green, Color.Blue };
+            Color[] colorsArr = new Color[] { Color.Gray, Color.Red, Color.Green, Color.Blue };
             
             for (int i=0; i<matrix.GetLength(0); i++)
             {
@@ -86,12 +86,12 @@ namespace SS_OpenCV
             if (matrix.GetLength(0) == 3)
             {
                 chart1.Series.RemoveAt(3);
-            } 
+            }
+
             chart1.ChartAreas[0].AxisX.Maximum = 255;
             chart1.ChartAreas[0].AxisX.Minimum = 0;
             chart1.ChartAreas[0].AxisY.Title = "Pixel Numbers";
             chart1.ChartAreas[0].AxisX.Title = "Intensities";
-            
             chart1.ResumeLayout();
         }
     }

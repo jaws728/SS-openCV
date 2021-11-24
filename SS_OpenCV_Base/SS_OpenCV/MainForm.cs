@@ -529,6 +529,64 @@ namespace SS_OpenCV
             Cursor = Cursors.Default; // normal cursor 
         }
 
+        private void blackWhiteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            InputBox form = new InputBox("THRESHOLD");
+            form.ShowDialog();
+            int threshold = Convert.ToInt32(form.ValueTextBox.Text);
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            ImageClass.ConvertToBW(img, threshold);
+
+            ImageViewer.Image = img.Bitmap;
+            ImageViewer.Refresh(); // refresh image on the screen
+
+            Cursor = Cursors.Default; // normal cursor 
+        }
+
+        private void blackWhiteOTSUToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            ImageClass.ConvertToBW_Otsu(img);
+
+            ImageViewer.Image = img.Bitmap;
+            ImageViewer.Refresh(); // refresh image on the screen
+
+            Cursor = Cursors.Default; // normal cursor 
+        }
+
+        private void equalizationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            ImageClass.Equalization(img);
+
+            ImageViewer.Image = img.Bitmap;
+            ImageViewer.Refresh(); // refresh image on the screen
+
+            Cursor = Cursors.Default; // normal cursor 
+        }
+
         private void mediaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (img == null) // verify if the image is already opened
