@@ -1317,13 +1317,69 @@ namespace SS_OpenCV
                 int height = img.Height;
                 int nChan = m.nChannels;
                 int widthstep = m.widthStep;
-                int x, y, gray;
-                int[,] matrix = new int[4, 256];
+                int x, y, max, variance;
+                int[] gray = Histogram_Gray(img);
+                int q1 = gray[0];
+                int q2 = 1-q1;
+                int u1 = gray[0];
+                int u2 = 0;
 
+                for (int i=1; i<gray.Length; i++)
+                    u2 = u2 + i*gray[i];
+
+                int threshold = 0;
+
+                if (u1 > 0)
+                    max = (int)Math.Round(q1 * q2 * Math.Sqrt(u1 / q1 - u2 / q2));
+                else
+                    max = 0;
+
+                for (int i=1; i<gray.Length; i++)
+                {
+                    q1 = q1 + gray[i];
+                    //if nothing on the left side: skip
+                    if (q1 == 0)
+                        continue;
+                    q2 = q2 - gray[i];
+                    //nothing on the right side - finish
+                    if (q2 == 0)
+                        break;
+
+                    u1 = u1 + i * gray[i];
+                    u2 = u2 - i * gray[i];
+
+                    variance = (int)Math.Round(q1 * q2 * Math.Sqrt(u1 / q1 - u2 / q2));
+
+                    if (variance > max)
+                    {
+                        threshold = i;
+                        max = variance;
+                    }
+                }
+                int j = 0;
+                //we have the value to separate black and white - level
                 for (x = 0; x < width; x++)
                 {
                     for (y = 0; y < height; y++)
                     {
+                        //gray = (int)Math.Round(((dataPtr + y * widthstep + x * nChan)[0] + (dataPtr + y * widthstep + x * nChan)[1] + (dataPtr + y * widthstep + x * nChan)[2]) / 3.0);
+                        if (j > 255)
+                            break;
+
+                        if (gray[j] > threshold)
+                        {
+                            (dataPtr + y * widthstep + x * nChan)[0] = (byte)255;
+                            (dataPtr + y * widthstep + x * nChan)[1] = (byte)255;
+                            (dataPtr + y * widthstep + x * nChan)[2] = (byte)255;
+
+                        }
+                        else
+                        {
+                            (dataPtr + y * widthstep + x * nChan)[0] = (byte)0;
+                            (dataPtr + y * widthstep + x * nChan)[1] = (byte)0;
+                            (dataPtr + y * widthstep + x * nChan)[2] = (byte)0;
+                        }
+                        j++;
                     }
                 }
             }
