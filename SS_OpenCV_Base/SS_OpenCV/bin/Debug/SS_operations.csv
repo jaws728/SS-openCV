@@ -1,3 +1,4 @@
+40;LP_Recognition;License Plate Reader;public static void LP_Recognition(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy,             int difficultyLevel,            string Type,         out Rectangle LP_Location,         out Rectangle LP_Chr1,         out Rectangle LP_Chr2,         out Rectangle LP_Chr3,         out Rectangle LP_Chr4,         out Rectangle LP_Chr5,         out Rectangle LP_Chr6,         out string LP_C1,         out string LP_C2,         out string LP_C3,         out string LP_C4,         out string LP_C5,        out string LP_C6     )
 1;Negative;Negative;public static void Negative(Image<Bgr,byte> img)
 2;BrightContrast;Brightness & Contrast;public static void BrightContrast(Image<Bgr,byte> img,int bright,double contrast)
 3;RedChannel;Red Channel;public static void RedChannel(Image<Bgr,byte> img)

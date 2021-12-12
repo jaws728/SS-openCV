@@ -255,3 +255,5 @@ D:\fct\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.csproj.CoreCompile
 D:\fct\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.csproj.CopyComplete
 D:\fct\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.exe
 D:\fct\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.pdb
+D:\fct\SS-openCV\SS_OpenCV_Base\SS_OpenCV\bin\Debug\Forms.dll
+D:\fct\SS-openCV\SS_OpenCV_Base\SS_OpenCV\bin\Debug\Forms.pdb
