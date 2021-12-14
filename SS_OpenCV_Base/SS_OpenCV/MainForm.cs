@@ -173,7 +173,7 @@ namespace SS_OpenCV
             //copy Undo Image
             imgUndo = img.Copy();
 
-            ImageClass.Red(img);
+            ImageClass.RedChannel(img);
 
             ImageViewer.Image = img.Bitmap;
             ImageViewer.Refresh(); // refresh image on the screen
@@ -190,7 +190,7 @@ namespace SS_OpenCV
             //copy Undo Image
             imgUndo = img.Copy();
 
-            ImageClass.Green(img);
+            ImageClass.GreenChannel(img);
 
             ImageViewer.Image = img.Bitmap;
             ImageViewer.Refresh(); // refresh image on the screen
@@ -207,7 +207,7 @@ namespace SS_OpenCV
             //copy Undo Image
             imgUndo = img.Copy();
 
-            ImageClass.Blue(img);
+            ImageClass.BlueChannel(img);
 
             ImageViewer.Image = img.Bitmap;
             ImageViewer.Refresh(); // refresh image on the screen
@@ -231,7 +231,7 @@ namespace SS_OpenCV
 
             form = new InputBox("Contrast: (0 to 3)");
             form.ShowDialog();
-            float contrast = Convert.ToSingle(form.ValueTextBox.Text);
+            double contrast = Convert.ToDouble(form.ValueTextBox.Text.ToString());
             if (contrast < 0)
                 contrast = 0;
             if (contrast > 3)
@@ -487,6 +487,7 @@ namespace SS_OpenCV
             Cursor = Cursors.WaitCursor; // clock cursor 
 
             int[] array = ImageClass.Histogram_Gray(img);
+            //copy 1 dimension array to 2 dimension matrix
             int[,] matrix = new int[1, 256];
             for (int i = 0; i < array.Length; i++)
             {
@@ -569,7 +570,8 @@ namespace SS_OpenCV
             Cursor = Cursors.Default; // normal cursor 
         }
 
-        private void equalizationToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void robertsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (img == null) // verify if the image is already opened
                 return;
@@ -579,7 +581,78 @@ namespace SS_OpenCV
             //copy Undo Image
             imgUndo = img.Copy();
 
-            ImageClass.Equalization(img);
+            ImageClass.Roberts(img, imgUndo);
+
+            ImageViewer.Image = img.Bitmap;
+            ImageViewer.Refresh(); // refresh image on the screen
+
+            Cursor = Cursors.Default; // normal cursor 
+        }
+
+        private void rotationBilinearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            InputBox form = new InputBox("Rotation angle:");
+            form.ShowDialog();
+            float angle = Convert.ToSingle(form.ValueTextBox.Text);
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            ImageClass.Rotation_Bilinear(img, imgUndo, angle);
+
+            ImageViewer.Image = img.Bitmap;
+            ImageViewer.Refresh(); // refresh image on the screen
+
+            Cursor = Cursors.Default; // normal cursor 
+        }
+
+        private void scaleBilinearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            InputBox form = new InputBox("Scale:");
+            form.ShowDialog();
+            float scaleFactor = Convert.ToSingle(form.ValueTextBox.Text);
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            ImageClass.Scale(img, imgUndo, scaleFactor);
+
+            ImageViewer.Image = img.Bitmap;
+            ImageViewer.Refresh(); // refresh image on the screen
+
+            Cursor = Cursors.Default; // normal cursor 
+        }
+
+        private void scaleXYBilinearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            InputBox form = new InputBox("Scale:");
+            form.ShowDialog();
+            float scaleFactor = Convert.ToSingle(form.ValueTextBox.Text);
+
+            //get mouse coordinates using mouseclick event
+            mouseFlag = true;
+            while (mouseFlag) //wait for mouseclick event
+                Application.DoEvents();
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            ImageClass.Scale_point_xy_Bilinear(img, imgUndo, scaleFactor, mouseX, mouseY);
 
             ImageViewer.Image = img.Bitmap;
             ImageViewer.Refresh(); // refresh image on the screen

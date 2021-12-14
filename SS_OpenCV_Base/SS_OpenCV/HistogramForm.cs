@@ -66,7 +66,7 @@ namespace SS_OpenCV
             }
             */
             
-            Color[] colorsArr = new Color[] { Color.Gray, Color.Red, Color.Green, Color.Blue };
+            //Color[] colorsArr = new Color[] { Color.Gray, Color.Red, Color.Green, Color.Blue };
             
             for (int i=0; i<matrix.GetLength(0); i++)
             {
@@ -74,18 +74,29 @@ namespace SS_OpenCV
                 {
                     chart1.Series[i].Points.AddXY(j, matrix[i, j]);
                 }
-                chart1.Series[i].Color = colorsArr[i];
+                //chart1.Series[i].Color = colorsArr[i];
             }
-            
+
             if (matrix.GetLength(0) == 1)
             {
                 chart1.Series.RemoveAt(1);
                 chart1.Series.RemoveAt(2);
                 chart1.Series.RemoveAt(3);
-            } 
-            if (matrix.GetLength(0) == 3)
+                chart1.Series[0].Color = Color.Gray;
+            }
+            else if (matrix.GetLength(0) == 3)
             {
                 chart1.Series.RemoveAt(3);
+                chart1.Series[0].Color = Color.Blue;
+                chart1.Series[1].Color = Color.Green;
+                chart1.Series[2].Color = Color.Red;
+            }
+            else
+            {
+                chart1.Series[0].Color = Color.Blue;
+                chart1.Series[1].Color = Color.Green;
+                chart1.Series[2].Color = Color.Red;
+                chart1.Series[3].Color = Color.Gray;
             }
 
             chart1.ChartAreas[0].AxisX.Maximum = 255;
