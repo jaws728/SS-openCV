@@ -1686,7 +1686,7 @@ namespace SS_OpenCV
                 int width = img.Width;
                 int height = img.Height;
                 int nC = m.nChannels;
-                int wS = m.widthStep;
+                int wS = m.widthStep;  
                 int x, y, gray;
                 int[,] matrix = new int[4, 256];
 
@@ -1796,7 +1796,7 @@ namespace SS_OpenCV
 
 
 
-        public static void Projections(Image<Bgr, byte> img)
+        public static void Level1 (Image<Bgr, byte> img)
         {
             unsafe
             {
@@ -1806,13 +1806,15 @@ namespace SS_OpenCV
                 int h = img.Height;
                 int nC = m.nChannels;
                 int wS = m.widthStep;
-                int x, y = 0;
+                int x, y = 0, prev = -1;
                 int[] projX = new int[w];
                 int[] projY = new int[h];
+
+                //Put all arrays with zero value
                 Array.Clear(projX, 0, projX.Length);
                 Array.Clear(projY, 0, projY.Length);
 
-
+                //1. Get horizontal and vertical projections
                 for (x = 0; x < w; x++)
                 {
                     for (; y < h; y++)
@@ -1823,6 +1825,46 @@ namespace SS_OpenCV
                     if ((byte)(dataPtr + y * wS + x * nC) != 0)
                         projX[x] += 1;
                 }
+
+                int[] xLoc = new int[8]; //include the points - for old licenses
+                int[] yLoc = new int[2];
+                int i = 0;
+
+                //2. From the projections get the letters position
+                //for x positions
+                for (x = 0; x < w; x++)
+                {
+                    if ((projX[x] != 0 & prev == 0) || (projX[x] == 0 & prev != 0)) //transfer from no pixel to pixels or vise versa
+                    {
+                        //save the x value to end/begin of the letter
+                        xLoc[i] = x;
+                        i++;
+                    }
+                    prev = projX[x];
+                }
+                //for y positions
+                i = 0;
+                prev = -1;
+                for (y = 0; y < h; y++)
+                {
+                    if ((projY[y] != 0 & prev == 0) || (projY[y] == 0 & prev != 0)) //transfer from no pixel to pixels or vise versa
+                    {
+                        //save the x value to end/begin of the letter
+                        yLoc[i] = y;
+                        i++;
+                    }
+                    prev = projY[y];
+                }
+
+                //3. Resize
+
+
+
+                //4. Binalization
+
+                //5. Compare to Data Base
+
+
             }
         }
 
