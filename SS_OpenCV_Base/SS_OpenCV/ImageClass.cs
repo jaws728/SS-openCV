@@ -1826,7 +1826,7 @@ namespace SS_OpenCV
                         projX[x] += 1;
                 }
 
-                int[] xLoc = new int[8]; //include the points - for old licenses
+                int[] xLoc = new int[16]; //include the points - for old licenses
                 int[] yLoc = new int[2];
                 int i = 0;
 
@@ -1856,14 +1856,42 @@ namespace SS_OpenCV
                     prev = projY[y];
                 }
 
-                //3. Resize
+                //3. remove dots of old plate
+                if (xLoc.Length == 16)
+                {
+                    //remove 3rd and 6th element with shift
+                    for (i = 4; i < 10; i++) //remove from 1st dot
+                    {
+                        xLoc[i] = xLoc[i + 2];
+                    }
+                    for (i = 10; i < (xLoc.Length - 4); i++) //remove from 2nd dot
+                    {
+                        xLoc[i] = xLoc[i + 2];
+                    }
+                    //delete last 4 elements
+                    Array.Clear(xLoc, 13, 4); //from index 13 with 4 length
+                }
 
+                //4. Resize
+                Image<Bgr, byte>[] letters = null; //store letters in image properties
+                for (x = 0; x < 13; x+=2)
+                {
+                    //RESIZE(width, height, interpolation, preserveScale)
+                    letters[x/2] = img.Resize(xLoc[x + 1] - xLoc[x], yLoc[1] - yLoc[0], Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, false);
+                }
 
+                //5. Binarization
+                for (i = 0; i < letters.Length; i++)
+                {
+                    ConvertToBW_Otsu(letters[i]);
+                }
 
-                //4. Binalization
+                //6. Compare to Data Base
+                int a = -1;
+                for (i = 0; i < letters.Length; i++)
+                {
 
-                //5. Compare to Data Base
-
+                }
 
             }
         }
