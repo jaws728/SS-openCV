@@ -4,6 +4,7 @@ using System.Text;
 using Emgu.CV.Structure;
 using Emgu.CV;
 using System.Drawing;
+using System.IO;
 
 namespace SS_OpenCV
 {
@@ -1675,6 +1676,22 @@ namespace SS_OpenCV
             }
         }
 
+        public static void Binarization(Emgu.CV.Image<Bgr, byte> img, int threshold)
+        {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                int width = img.Width;
+                int height = img.Height;
+                int nC = m.nChannels;
+                int wS = m.widthStep;
+                int x, y, gray;
+
+            }
+        }
+
 
         public static void ConvertToBW(Emgu.CV.Image<Bgr, byte> img, int threshold)
         {
@@ -1688,7 +1705,6 @@ namespace SS_OpenCV
                 int nC = m.nChannels;
                 int wS = m.widthStep;  
                 int x, y, gray;
-                int[,] matrix = new int[4, 256];
 
                 if (nC == 3)
                 {  // image in RGB
@@ -1716,10 +1732,67 @@ namespace SS_OpenCV
             }
         }
 
+        public static int otsu(Emgu.CV.Image<Bgr, byte> img)
+        {
+            unsafe
+            {
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                int width = img.Width;
+                int height = img.Height;
+                int nC = m.nChannels;
+                int wS = m.widthStep;
+
+                int[] hist = Histogram_Gray(img);
+                float[] prob = new float[256];
+                float area = width * height;
+                int max = 0, variance, threshold = 0;
+                float q1 = 0;
+                float q2 = 0;
+                float u1 = 0;
+                float u2 = 0;
+
+                if (nC == 3)
+                {
+                    //1 - get max value for variance = q1.q2.(u1-u2)^2
+                    for (int i = 0; i < 256; i++)
+                        prob[i] = hist[i] / area;
+
+                    for (int i = 1; i < 256; i++) //sum all for u2, then just do inverse of u1
+                        u2 += i * prob[i];
+
+                    //for (int i = 0; i < 256; i++) //sum all for q2, then can just inverse of q1
+                    //    q2 += prob[i];
+                    q1 = prob[0];
+                    q2 = 1 - q1;
+                    //u1 = prob[0];
+                    for (int i = 1; i < 256; i++)
+                    {
+                        q1 += prob[i];
+                        q2 -= prob[i];
+
+                        u1 += i * prob[i];
+                        u2 -= i * prob[i];
+
+
+                        variance = (int)Math.Round(q1 * q2 * Math.Pow((u1 / q1 - u2 / q2), 2.0));
+
+                        if (variance > max)
+                        {
+                            threshold = i;
+                            max = variance;
+                        }
+                    }
+                }
+                return threshold;
+            }
+        }
+
         public static void ConvertToBW_Otsu(Emgu.CV.Image<Bgr, byte> img)
         {
             unsafe
             {
+                /*
                 MIplImage m = img.MIplImage;
                 byte* dataPtr = (byte*)m.imageData.ToPointer();
                 int width = img.Width;
@@ -1767,36 +1840,37 @@ namespace SS_OpenCV
                             max = variance;
                         }
                     }
-
-                    //2 - Convert now to B&W with threshold as value separator
-                    int gray;
-                    for (x = 0; x < width; x++)
+                    */
+                //2 - Convert now to B&W with threshold as value separator
+                /*int gray;
+                for (x = 0; x < width; x++)
+                {
+                    for (y = 0; y < height; y++)
                     {
-                        for (y = 0; y < height; y++)
+                        gray = (int)Math.Round(((dataPtr + y * wS + x * nC)[0] + (dataPtr + y * wS + x * nC)[1] + (dataPtr + y * wS + x * nC)[2]) / 3.0);
+                        if (gray > threshold)
                         {
-                            gray = (int)Math.Round(((dataPtr + y * wS + x * nC)[0] + (dataPtr + y * wS + x * nC)[1] + (dataPtr + y * wS + x * nC)[2]) / 3.0);
-                            if (gray > threshold)
-                            {
-                                (dataPtr + y * wS + x * nC)[0] = (byte)255;
-                                (dataPtr + y * wS + x * nC)[1] = (byte)255;
-                                (dataPtr + y * wS + x * nC)[2] = (byte)255;
+                            (dataPtr + y * wS + x * nC)[0] = (byte)255;
+                            (dataPtr + y * wS + x * nC)[1] = (byte)255;
+                            (dataPtr + y * wS + x * nC)[2] = (byte)255;
 
-                            }
-                            else
-                            {
-                                (dataPtr + y * wS + x * nC)[0] = (byte)0;
-                                (dataPtr + y * wS + x * nC)[1] = (byte)0;
-                                (dataPtr + y * wS + x * nC)[2] = (byte)0;
-                            }
+                        }
+                        else
+                        {
+                            (dataPtr + y * wS + x * nC)[0] = (byte)0;
+                            (dataPtr + y * wS + x * nC)[1] = (byte)0;
+                            (dataPtr + y * wS + x * nC)[2] = (byte)0;
                         }
                     }
                 }
+                }*/
+
+                int threshold = otsu(img);
+                ConvertToBW(img, threshold);
             }
         }
 
-
-
-        public static void Level1 (Image<Bgr, byte> img)
+        public static void Projections(Image<Bgr, byte> img, int[] projX, int[] projY)
         {
             unsafe
             {
@@ -1806,7 +1880,36 @@ namespace SS_OpenCV
                 int h = img.Height;
                 int nC = m.nChannels;
                 int wS = m.widthStep;
-                int x, y = 0, prev = -1;
+                int x, y;
+
+                //1. Get horizontal and vertical projections
+                int th = otsu(img);
+                for (x = 0; x < w; x++)
+                {
+                    for (y = 0; y < h; y++)
+                    {
+                        if ((dataPtr + y * wS + x * nC)[0] + (dataPtr + y * wS + x * nC)[1] + (dataPtr + y * wS + x * nC)[2] == 0) //black 
+                        {
+                            projX[x] += 1;
+                            projY[y] += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        /*
+        public static void Letters(Image<Bgr, byte> img, Rectangle r, string str)
+        {
+            unsafe
+            {
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                int w = img.Width;
+                int h = img.Height;
+                int nC = m.nChannels;
+                int wS = m.widthStep;
+                int x, y, prev = -1;
                 int[] projX = new int[w];
                 int[] projY = new int[h];
 
@@ -1815,26 +1918,31 @@ namespace SS_OpenCV
                 Array.Clear(projY, 0, projY.Length);
 
                 //1. Get horizontal and vertical projections
+                int th = otsu(img);
+                int i = 0;
                 for (x = 0; x < w; x++)
                 {
-                    for (; y < h; y++)
+                    for (y = 0; y < h; y++)
                     {
-                        if ((byte)(dataPtr + y * wS + x * nC) != 0)
+                        if ((dataPtr + y * wS + x * nC)[0] + (dataPtr + y * wS + x * nC)[1] + (dataPtr + y * wS + x * nC)[2] >= th) //white
+                        {
+                            projX[x] += 1;
                             projY[y] += 1;
+                        }
                     }
-                    if ((byte)(dataPtr + y * wS + x * nC) != 0)
-                        projX[x] += 1;
+                    //if ((dataPtr + y * wS + x * nC)[0] + (dataPtr + y * wS + x * nC)[1] + (dataPtr + y * wS + x * nC)[2] != 765)
+                    //    projY[i] += 1;
+                    //i++;//TODO
                 }
 
                 int[] xLoc = new int[16]; //include the points - for old licenses
                 int[] yLoc = new int[2];
-                int i = 0;
 
                 //2. From the projections get the letters position
                 //for x positions
-                for (x = 0; x < w; x++)
+                for (x = 0; x < projX.Length; x++)
                 {
-                    if ((projX[x] != 0 & prev == 0) || (projX[x] == 0 & prev != 0)) //transfer from no pixel to pixels or vise versa
+                    if ((projX[x] != 0 && prev == 0) || (projX[x] == 0 && prev != 0)) //transfer from no pixel to pixels or vise versa
                     {
                         //save the x value to end/begin of the letter
                         xLoc[i] = x;
@@ -1845,9 +1953,11 @@ namespace SS_OpenCV
                 //for y positions
                 i = 0;
                 prev = -1;
-                for (y = 0; y < h; y++)
+                for (y = 0; y < projY.Length; y++)
                 {
-                    if ((projY[y] != 0 & prev == 0) || (projY[y] == 0 & prev != 0)) //transfer from no pixel to pixels or vise versa
+                    if (i == 2)
+                        break;
+                    if ((projY[y] != 0 && prev == 0) || (projY[y] == 0 && prev != 0)) //transfer from no pixel to pixels or vise versa
                     {
                         //save the x value to end/begin of the letter
                         yLoc[i] = y;
@@ -1869,15 +1979,22 @@ namespace SS_OpenCV
                         xLoc[i] = xLoc[i + 2];
                     }
                     //delete last 4 elements
-                    Array.Clear(xLoc, 13, 4); //from index 13 with 4 length
+                    //Array.Clear(xLoc, 13, 4); //from index 13 with 4 length
+                }
+
+                //Get Rectangles
+                r[0] = new Rectangle(xLoc[0], yLoc[0], xLoc[12] - xLoc[0], yLoc[1] - yLoc[0]);
+                for (i = 0; i < 12; i += 2)
+                {
+                    r[i / 2 + 1] = new Rectangle(xLoc[i], yLoc[0], xLoc[i + 1] - xLoc[i], yLoc[1] - yLoc[0]);
                 }
 
                 //4. Resize
-                Image<Bgr, byte>[] letters = null; //store letters in image properties
-                for (x = 0; x < 13; x+=2)
+                Image<Bgr, byte>[] letters = new Image<Bgr, byte>[6]; //store letters in image properties
+                for (x = 0; x < 12; x += 2)
                 {
                     //RESIZE(width, height, interpolation, preserveScale)
-                    letters[x/2] = img.Resize(xLoc[x + 1] - xLoc[x], yLoc[1] - yLoc[0], Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, false);
+                    letters[x / 2] = img.Resize(xLoc[x + 1] - xLoc[x], yLoc[1] - yLoc[0], Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
                 }
 
                 //5. Binarization
@@ -1887,10 +2004,206 @@ namespace SS_OpenCV
                 }
 
                 //6. Compare to Data Base
-                int a = -1;
+                //string str = null;
+                string path = "..\\BD\\";
+                string[] files = Directory.GetFiles(path, "*.bmp", SearchOption.AllDirectories);
+                int match = 0, bestMatch = 0;
+                Image<Bgr, byte> data = null;
+                int width = 0, height = 0;
+
                 for (i = 0; i < letters.Length; i++)
                 {
+                    width = letters[i].Width;
+                    height = letters[i].Height;
+                    dataPtr = (byte*)letters[i].MIplImage.imageData.ToPointer();
 
+                    foreach (string file in files)
+                    {
+                        data = new Image<Bgr, byte>(file);
+                        data = data.Resize(width, height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, false);
+                        ConvertToBW_Otsu(data);
+
+                        byte* ptr1 = (byte*)data.MIplImage.imageData.ToPointer();
+
+                        //Comparison
+                        for (x = 0; x < width; x++)
+                        {
+                            for (y = 0; y < height; y++)
+                            {
+                                byte* p1 = dataPtr + y * wS + x * nC;
+                                byte* p2 = ptr1 + y * wS + x * nC;
+                                if (p1[0] == p2[0])
+                                {
+                                    match++;
+                                }
+                            }
+                        }
+
+                        //Store more simular one
+                        if (match > bestMatch)
+                        {
+                            bestMatch = match;
+                            str[i] = Path.GetFileNameWithoutExtension(file);
+                        }
+                        match = 0;
+                    }
+                }
+            }
+        }
+        */
+
+        public static void getLocLetters(int[] projX, int[] projY, int[] xLoc, int[] yLoc, Rectangle[] r)
+        {
+            unsafe
+            {
+                int[] xLoc1 = new int[16];
+                int prev = -1;
+                int i = 0;
+                //for x positions
+                for (int x = 0; x < projX.Length; x++)
+                {
+                    if (i > 15)
+                        break;
+                    if ((projX[x] != 0 && prev == 0) || (projX[x] == 0 && prev != 0)) //transfer from no pixel to pixels or vise versa
+                    {
+                        //save the x value to end/begin of the letter
+                        xLoc1[i] = x;
+                        i++;
+                    }
+                    prev = projX[x];
+                }
+                //for y positions
+                i = 0;
+                prev = -1;
+                for (int y = 0; y < projY.Length; y++)
+                {
+                    if (i == 2)
+                        break;
+                    if ((projY[y] != 0 && prev == 0) || (projY[y] == 0 && prev != 0)) //transfer from no pixel to pixels or vise versa
+                    {
+                        //save the x value to end/begin of the letter
+                        yLoc[i] = y;
+                        i++;
+                    }
+                    prev = projY[y];
+                }
+
+                //remove dots of old plate
+                if (xLoc1.Length == 16)
+                {
+                    //remove 3rd and 6th element with shift
+                    for (i = 4; i < 10; i++) //remove from 1st dot
+                    {
+                        xLoc1[i] = xLoc1[i + 2];
+                    }
+                    for (i = 10; i < (xLoc.Length - 4); i++) //remove from 2nd dot
+                    {
+                        xLoc1[i] = xLoc1[i + 2];
+                    }
+                    //delete last 4 elements
+                    //Array.Clear(xLoc, 11, 4); //from index 13 with 4 length
+                }
+
+                Array.Copy(xLoc1, xLoc, xLoc.Length);
+
+                r[0] = new Rectangle(xLoc[0], yLoc[0], xLoc[11] - xLoc[0], yLoc[1] - yLoc[0]);
+                for (i = 0; i < 12; i += 2)
+                {
+                    r[i / 2 + 1] = new Rectangle(xLoc[i], yLoc[0], xLoc[i + 1] - xLoc[i], yLoc[1] - yLoc[0]);
+                }
+            }
+        }
+
+        public static string getLetter(Image<Bgr, byte> img)
+        {
+            unsafe
+            {
+                string path = "..\\..\\..\\BD\\";
+                string[] files = Directory.GetFiles(path, "*.bmp", SearchOption.AllDirectories);
+                int match = 0, bestMatch = 0;
+                string str = null;
+               
+                byte* dataPtr = (byte*)img.MIplImage.imageData.ToPointer();
+                int width = img.Width;
+                int height = img.Height;
+                int nC = img.MIplImage.nChannels;
+                int wS = img.MIplImage.widthStep;
+
+                foreach (string file in files)
+                {
+                    Image<Bgr, byte> data = new Image<Bgr, byte>(file);
+                    data = data.Resize(width, height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, false);
+                    ConvertToBW_Otsu(data);
+
+                    byte* ptr1 = (byte*)data.MIplImage.imageData.ToPointer();
+
+                    //Comparison
+                    for (int x = 0; x < width; x++)
+                    {
+                        for (int y = 0; y < height; y++)
+                        {
+                            byte* p1 = dataPtr + y * wS + x * nC;
+                            byte* p2 = ptr1 + y * wS + x * nC;
+                            if (p1[0] == p2[0])
+                            {
+                                match++;
+                            }
+                        }
+                    }
+
+                    //Store more simular one
+                    if (match > bestMatch)
+                    {
+                        bestMatch = match;
+                        str = Path.GetFileNameWithoutExtension(file);
+                    }
+                    match = 0;
+                }
+
+                return str;
+            }
+        }
+
+
+        public static void Level1 (Image<Bgr, byte> img, Rectangle[] rect, string[] str)
+        {
+            unsafe
+            {
+                ConvertToBW_Otsu(img);
+                //MIplImage m = img.MIplImage;
+                //byte* dataPtr = (byte*)m.imageData.ToPointer();
+                //int w = img.Width;
+                //int h = img.Height;
+                //int wS = m.widthStep;
+                //int nC = m.nChannels;
+                int[] projX = new int[img.Width];
+                int[] projY = new int[img.Height];
+
+                //Put all arrays with zero value
+                Array.Clear(projX, 0, projX.Length);
+                Array.Clear(projY, 0, projY.Length);
+
+                //1. Get horizontal and vertical projections
+                Projections(img, projX, projY);
+
+                //2. Get the letters position - rectangles
+                int[] xLoc = new int[12]; //without points - for old licenses
+                int[] yLoc = new int[2];
+                //Rectangle[] rect = new Rectangle[7];
+                getLocLetters(projX, projY, xLoc, yLoc, rect);
+
+                //3. Resize
+                Image<Bgr, byte>[] letters = new Image<Bgr, byte>[6]; //store letters in image properties
+                for (int i = 1; i < 7; i++)
+                {
+                    //RESIZE(width, height, interpolation, preserveScale)
+                    letters[i - 1] = img.Resize(rect[i].Width, rect[i].Height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+                }
+
+                //4. Compare to Data Base
+                for (int i = 0; i < letters.Length; i++)
+                {
+                    str[i] = getLetter(letters[i]);
                 }
 
             }
@@ -1937,6 +2250,11 @@ namespace SS_OpenCV
             out string LP_C6
       )
         {
+            Rectangle[] r = new Rectangle[7];
+            string[] str = new string[6];
+            Level1(img, r, str);
+
+            /*
             LP_Location = new Rectangle(220, 190, 200, 40);
 
             LP_Chr1 = new Rectangle(340, 190, 30, 40);
@@ -1952,6 +2270,26 @@ namespace SS_OpenCV
             LP_C4 = "4";
             LP_C5 = "5";
             LP_C6 = "6";
+
+            */
+            
+            LP_Location = r[0];
+
+            LP_Chr1 = r[1];
+            LP_Chr2 = r[2];
+            LP_Chr3 = r[3];
+            LP_Chr4 = r[4];
+            LP_Chr5 = r[5];
+            LP_Chr6 = r[6];
+
+            LP_C1 = str[0];
+            LP_C2 = str[1];
+            LP_C3 = str[2];
+            LP_C4 = str[3];
+            LP_C5 = str[4];
+            LP_C6 = str[5];
+
+            
 
 
         }
