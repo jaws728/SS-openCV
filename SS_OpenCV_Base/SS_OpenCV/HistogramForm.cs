@@ -81,7 +81,7 @@ namespace SS_OpenCV
             {
                 chart1.Series.RemoveAt(1);
                 chart1.Series.RemoveAt(2);
-                chart1.Series.RemoveAt(3);
+                //chart1.Series.RemoveAt(3);
                 chart1.Series[0].Color = Color.Gray;
             }
             else if (matrix.GetLength(0) == 3)
@@ -99,7 +99,8 @@ namespace SS_OpenCV
                 chart1.Series[3].Color = Color.Gray;
             }
 
-            chart1.ChartAreas[0].AxisX.Maximum = 255;
+            //chart1.ChartAreas[0].AxisX.Maximum = 255;
+            chart1.ChartAreas[0].AxisX.Maximum = matrix.GetLength(1);
             chart1.ChartAreas[0].AxisX.Minimum = 0;
             chart1.ChartAreas[0].AxisY.Title = "Pixel Numbers";
             chart1.ChartAreas[0].AxisX.Title = "Intensities";

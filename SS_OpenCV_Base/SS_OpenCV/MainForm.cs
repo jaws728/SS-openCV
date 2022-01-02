@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using System.Drawing;
 
 namespace SS_OpenCV
 { 
@@ -654,6 +655,42 @@ namespace SS_OpenCV
 
             ImageClass.Scale_point_xy_Bilinear(img, imgUndo, scaleFactor, mouseX, mouseY);
 
+            ImageViewer.Image = img.Bitmap;
+            ImageViewer.Refresh(); // refresh image on the screen
+
+            Cursor = Cursors.Default; // normal cursor 
+        }
+
+        private void viewRectanglesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // verify if the image is already opened
+                return;
+
+            Cursor = Cursors.WaitCursor; // clock cursor 
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            Rectangle[] r = new Rectangle[7];
+            string[] str = new string[6];
+            //int[] proj = new int[img.Width];
+
+            ImageClass.LP_Recognition(img, imgUndo, 1, "1", out r[0], out r[1], out r[2], out r[3], out r[4], out r[5], out r[6], out str[0], out str[1], out str[2], out str[3], out str[4], out str[5]);
+            //ImageClass.LP_Recognition(img, imgUndo, 1, "1", out r[0], out r[1], out r[2], out r[3], out r[4], out r[5], out r[6], out str[0], out str[1], out str[2], out str[3], out str[4], out str[5], proj);
+
+            string mess = str[0] + str[1] + str[2] + str[3] + str[4] + str[5];
+            MessageBox.Show(mess);
+
+            /*
+            int[,] matrix = new int[1, proj.Length];
+            for (int i = 0; i < proj.Length; i++)
+            {
+                matrix[0, i] = proj[i];
+            }
+
+            HistogramForm form = new HistogramForm(matrix);
+            form.ShowDialog();
+            */
             ImageViewer.Image = img.Bitmap;
             ImageViewer.Refresh(); // refresh image on the screen
 
