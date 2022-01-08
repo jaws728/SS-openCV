@@ -257,3 +257,22 @@ D:\fct\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.exe
 D:\fct\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.pdb
 D:\fct\SS-openCV\SS_OpenCV_Base\SS_OpenCV\bin\Debug\Forms.dll
 D:\fct\SS-openCV\SS_OpenCV_Base\SS_OpenCV\bin\Debug\Forms.pdb
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\bin\Debug\SS_OpenCV.exe.config
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\bin\Debug\SS_OpenCV.exe
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\bin\Debug\SS_OpenCV.pdb
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\bin\Debug\Forms.dll
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\bin\Debug\SS_Eval.pdb
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\bin\Debug\Forms.pdb
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.csproj.AssemblyReference.cache
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.csproj.SuggestedBindingRedirects.cache
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.AuthorsForm.resources
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.FilterForm.resources
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.HistogramForm.resources
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.InputBox.resources
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.MainForm.resources
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.Properties.Resources.resources
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.csproj.GenerateResource.cache
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.csproj.CoreCompileInputs.cache
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.csproj.CopyComplete
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.exe
+C:\Users\my pc\Desktop\SS-openCV\SS_OpenCV_Base\SS_OpenCV\obj\Debug\SS_OpenCV.pdb

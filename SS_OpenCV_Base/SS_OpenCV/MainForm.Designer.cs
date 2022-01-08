@@ -69,13 +69,12 @@
             this.histogramRGBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.histogramAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoZoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.platesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.evalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.equalizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ImageViewer = new System.Windows.Forms.PictureBox();
-            this.platesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewRectanglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageViewer)).BeginInit();
@@ -96,8 +95,8 @@
             this.evalToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(723, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(542, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -401,6 +400,13 @@
             this.autoZoomToolStripMenuItem.Text = "Auto Zoom";
             this.autoZoomToolStripMenuItem.Click += new System.EventHandler(this.autoZoomToolStripMenuItem_Click);
             // 
+            // platesToolStripMenuItem
+            // 
+            this.platesToolStripMenuItem.Name = "platesToolStripMenuItem";
+            this.platesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.platesToolStripMenuItem.Text = "Plates";
+            this.platesToolStripMenuItem.Click += new System.EventHandler(this.platesToolStripMenuItem_Click);
+            // 
             // autoresToolStripMenuItem
             // 
             this.autoresToolStripMenuItem.Name = "autoresToolStripMenuItem";
@@ -426,45 +432,27 @@
             this.panel1.Controls.Add(this.ImageViewer);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 24);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(723, 412);
+            this.panel1.Size = new System.Drawing.Size(542, 330);
             this.panel1.TabIndex = 6;
             // 
             // ImageViewer
             // 
-            this.ImageViewer.Location = new System.Drawing.Point(4, 4);
-            this.ImageViewer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ImageViewer.Location = new System.Drawing.Point(3, 3);
             this.ImageViewer.Name = "ImageViewer";
             this.ImageViewer.Size = new System.Drawing.Size(576, 427);
             this.ImageViewer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.ImageViewer.TabIndex = 6;
             this.ImageViewer.TabStop = false;
             // 
-            // platesToolStripMenuItem
-            // 
-            this.platesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewRectanglesToolStripMenuItem});
-            this.platesToolStripMenuItem.Name = "platesToolStripMenuItem";
-            this.platesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.platesToolStripMenuItem.Text = "Plates";
-            // 
-            // viewRectanglesToolStripMenuItem
-            // 
-            this.viewRectanglesToolStripMenuItem.Name = "viewRectanglesToolStripMenuItem";
-            this.viewRectanglesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.viewRectanglesToolStripMenuItem.Text = "ViewRectangles";
-            this.viewRectanglesToolStripMenuItem.Click += new System.EventHandler(this.viewRectanglesToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(723, 436);
+            this.ClientSize = new System.Drawing.Size(542, 354);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "MainForm";
             this.Text = "Sistemas Sensoriais 2021/2022 - Image processing";
             this.menuStrip1.ResumeLayout(false);
@@ -526,7 +514,6 @@
         private System.Windows.Forms.ToolStripMenuItem scaleBilinearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scaleXYBilinearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem platesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewRectanglesToolStripMenuItem;
     }
 }
 
