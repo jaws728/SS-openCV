@@ -673,15 +673,15 @@ namespace SS_OpenCV
             Rectangle[] r = new Rectangle[7];
             string[] str = new string[6];
             //int[] proj = new int[img.Width];
-            int[] proj = new int[img.Height];
+            //int[] proj = new int[img.Height];
 
-            //ImageClass.LP_Recognition(img, imgUndo, 2, "A", out r[0], out r[1], out r[2], out r[3], out r[4], out r[5], out r[6], out str[0], out str[1], out str[2], out str[3], out str[4], out str[5]);
-            ImageClass.LP_Recognition(img, imgUndo, 2, "A", out r[0], out r[1], out r[2], out r[3], out r[4], out r[5], out r[6], out str[0], out str[1], out str[2], out str[3], out str[4], out str[5], proj);
+            ImageClass.LP_Recognition(img, imgUndo, 1, "B", out r[0], out r[1], out r[2], out r[3], out r[4], out r[5], out r[6], out str[0], out str[1], out str[2], out str[3], out str[4], out str[5]);
+            //ImageClass.LP_Recognition(img, imgUndo, 1, "B", out r[0], out r[1], out r[2], out r[3], out r[4], out r[5], out r[6], out str[0], out str[1], out str[2], out str[3], out str[4], out str[5], proj);
 
             string mess = str[0] + str[1] + str[2] + str[3] + str[4] + str[5];
-            //MessageBox.Show(mess);
+            MessageBox.Show(mess);
 
-
+            /*
             int[,] matrix = new int[1, proj.Length];
             for (int i = 0; i < proj.Length; i++)
             {
@@ -690,7 +690,7 @@ namespace SS_OpenCV
 
             HistogramForm form = new HistogramForm(matrix);
             form.ShowDialog();
-
+            */
 
             ImageViewer.Image = img.Bitmap;
             ImageViewer.Refresh(); // refresh image on the screen

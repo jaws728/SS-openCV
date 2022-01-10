@@ -1862,8 +1862,8 @@ namespace SS_OpenCV
                 byte* dataPtr = (byte*)m.imageData.ToPointer();
                 //int w = img.Width;
                 //int h = img.Height;
-                int w = r.Width;
-                int h = r.Height;
+                int w = r.Width + r.X;
+                int h = r.Height + r.Y;
                 int nC = m.nChannels;
                 int wS = m.widthStep;
                 int x, y;
@@ -1888,77 +1888,129 @@ namespace SS_OpenCV
         }
 
 
-        public static void getLocLetters(int[] projX, int[] projY, Rectangle[] r, int level)
+        public static void getLocLetters(int[] projX, int[] projY, Rectangle[] r, int level, string cat)
         {
             unsafe
             {
-                  
-                int[] xLoc = new int[12]; //with points - for old licenses
+                int[] xLoc1 = new int[16];
+                int[] xLoc = new int[12];
                 int[] xLocL = new int[8];
                 int[] xLocR = new int[8];
                 int[] yLoc = new int[2];
-                int prev = -1;
-                int i = 0, j = 0;
-                int xPas = projX.Max() / 9;//8
-                int yPas = projY.Max() / 5;//5
+                int prev = projX[0];
+                int i = 0; //, j = 0;
+                int xPas = projX.Max() / 8;//8
+                //int yPas = 5; //projY.Max() / 5;//5
 
                 //for x positions
+                /*
                 for (int x = 0; x < projX.Length; x++)
                 {
-                    if (projX[x] >= xPas && prev < xPas)
+                    if (projX[x] >= xPas && prev < xPas && i != 8)
                         xLocL[i++] = x;
-                    if (projX[x] < xPas && prev >= xPas)
+                    if (projX[x] <= xPas && prev > xPas && j != 8)
                         xLocR[j++] = x;
                     prev = projX[x];
                 }
+                */
 
-                //for y positions
-                i = 0;
-                prev = -1;
-                for (int y = 0; y < projY.Length; y++)
+                /*
+                if (xLocL[xLocL.Length - 1] == 0)
                 {
-                    if (i == 2)
-                        break;
-                    
-                    if ((projY[y] > yPas && prev < yPas) || (projY[y] < yPas && prev > yPas)) //transfer from no pixel to pixels or vise versa
+                    for (i = xLocL.Length - 1; i > 1; i--)
                     {
-                        //save the x value to end/begin of the letter
-                        yLoc[i++] = y;
+                        xLocL[i] = xLocL[i - 1];
                     }
-                    prev = projY[y];
+                    xLocL[0] = 0;
                 }
-
-                j = 0;
-                //remove dots
-                if (xLocL[7] != 0)
+                */
+                if (level == 2)
                 {
-                    for (i = 0; i < xLocL.Length; i++)
+                    xLoc1[i++] = 0;
+                    //xLoc1[xLoc1.Length - 1] = projX[projX.Length - 1];
+                }
+                for (int x = 0; x < projX.Length; x++)
+                {
+                    if (i == 16)
+                        break;
+                    if ((projX[x] >= xPas && prev < xPas) || (projX[x] < xPas && prev >= xPas))
                     {
-                        if ((i != 2) && (i != 5))
+                        if (i != 0)
                         {
-                            xLoc[j++] = xLocL[i];
-                            xLoc[j++] = xLocR[i];
+                            if (xLoc1[i - 1] + 5 < x)
+                                xLoc1[i++] = x;
+                        }else
+                            xLoc1[i++] = x;
+                    }
+                    prev = projX[x];
+                }
+                
+
+                int j = 0;
+                //remove dots
+                if (cat.Equals("A"))
+                {
+                    for (i = 0; i < xLoc1.Length; i++)
+                    {
+                        if (i != 4 && i != 5 && i != 10 && i != 11)
+                        {
+                            xLoc[j++] = xLoc1[i];
                         }
                     }
                 } else
                 {
-                    for (i = 0; i < xLoc.Length; i++)
+                    /*
+                    for (i = 0; i < xLoc1.Length; i++)
                     {
-                        xLoc[j++] = xLocL[i];
-                        xLoc[j++] = xLocR[i];
+                        xLoc[j++] = xLoc1[i];
                     }
+                    */
+                    Array.Copy(xLoc1, xLoc, xLoc.Length);
+                }
+                if (level == 2)
+                {
+                    xLoc[xLoc.Length - 1] = projX.Length - 1;
                 }
 
+                //for y positions
                 if (level == 1)
-                    r[0] = new Rectangle(xLoc[0], yLoc[0], xLoc[11] - xLoc[0], yLoc[1] - yLoc[0]);
-                for (i = 0; i < 12; i += 2)
                 {
-                    r[i / 2 + 1] = new Rectangle(xLoc[i], yLoc[0], xLoc[i + 1] - xLoc[i], yLoc[1] - yLoc[0]);
+                    /*
+                    i = 0;
+                    prev = -1;
+                    for (int y = 0; y < projY.Length; y++)
+                    {
+                        if (i == 2)
+                            break;
+
+                        if ((projY[y] > yPas && prev < yPas) || (projY[y] < yPas && prev > yPas)) //transfer from no pixel to pixels or vise versa
+                        {
+                            //save the x value to end/begin of the letter
+                            yLoc[i++] = y;
+                        }
+                        prev = projY[y];
+                    }
+                    */
+                    yLoc[0] = (int)(projY.Length * .08);//10;
+                    yLoc[1] = (int)(projY.Length * .96);
+                    r[0] = new Rectangle(xLoc[0], yLoc[0], xLoc[11] - xLoc[0], yLoc[1] - yLoc[0]);
+                    for (i = 0; i < 12; i += 2)
+                    {
+                        r[i / 2 + 1] = new Rectangle(xLoc[i] - 2, yLoc[0], xLoc[i + 1] - xLoc[i] + 4, yLoc[1] - yLoc[0]);
+                    }
+                } else
+                {
+                    yLoc[0] = r[0].Y;
+                    yLoc[1] = r[0].Height + r[0].Y;
+                    for (i = 0; i < 12; i += 2)
+                    {
+                        r[i / 2 + 1] = new Rectangle(xLoc[i] + r[0].X - 2, yLoc[0], xLoc[i + 1] - xLoc[i] + 4, yLoc[1] - yLoc[0]);
+                    }
                 }
             }
         }
 
-        public static string getLetter(Image<Bgr, byte> img, Rectangle rect)
+        public static string getLetter(Image<Bgr, byte> img, Rectangle rect, int state)
         {
             unsafe
             {
@@ -1975,6 +2027,17 @@ namespace SS_OpenCV
 
                 foreach (string file in files)
                 {
+                    if (state == 1)
+                    {
+                        if (!Path.GetFileNameWithoutExtension(file).All(char.IsDigit))
+                            continue;
+                    }
+                    if (state == 2)
+                    {
+                        if (Path.GetFileNameWithoutExtension(file).All(char.IsDigit))
+                            continue;
+                    }
+
                     Image<Bgr, byte> data = new Image<Bgr, byte>(file);
                     data = data.Resize(width, height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, false);
                     ConvertToBW_Otsu(data);
@@ -2011,22 +2074,19 @@ namespace SS_OpenCV
         }
 
 
-        public static void Level1 (Image<Bgr, byte> img, Image<Bgr, byte> imgCopy, Rectangle[] rect, string[] str)
+        public static void Level1 (Image<Bgr, byte> img, Image<Bgr, byte> imgCopy, Rectangle[] rect, string[] str, string cat)
         {
             unsafe
             {
                 //Convert to Black and White
-                //int th = otsu(img);
                 Median(img, imgCopy);
                 ConvertToBW_Otsu(img);
 
                 int[] projX = new int[img.Width];
                 int[] projY = new int[img.Height];
                 //Put all arrays with zero value
-                Array.Clear(projX, 0, projX.Length);
-                Array.Clear(projY, 0, projY.Length);
-
-
+                //Array.Clear(projX, 0, projX.Length);
+                //Array.Clear(projY, 0, projY.Length);
 
                 //1. Get horizontal and vertical projections
                 rect[0] = new Rectangle(0, 0, img.Width, img.Height);
@@ -2034,103 +2094,62 @@ namespace SS_OpenCV
                 //Array.Copy(projX, proj, projX.Length);
 
                 //2. Get the letters position - rectangles
-                getLocLetters(projX, projY, rect, 1);
-
-                //Resize
-                /*
-                Image<Bgr, byte>[] letters = new Image<Bgr, byte>[6]; //store letters in image properties
-                for (int i = 0; i < letters.Length; i++)
-                {
-                    //RESIZE(width, height, interpolation, preserveScale)
-                    //letters[i - 1] = img.Resize(rect[i].Width, rect[i].Height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, false);
-                    //bitmap.Save("d:\\fct\\" + i +".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
-                    Bitmap bitmap = new Bitmap(rect[i + 1].Width, rect[i + 1].Height);
-                    letters[i] = new Image<Bgr, Byte>(bitmap);
-                }*/
+                getLocLetters(projX, projY, rect, 1, cat);
 
                 //3. Compare to Data Base
-                for (int i = 0; i < str.Length; i++)
+                for (int i = 0; i < str.Length; i++) //0 1 2 3 4 5
                 {
-                    str[i] = getLetter(img, rect[i + 1]);
-                }   
-
-            }
-        }
-
-        public static void ProjFreq(Image<Bgr, byte> img, int[] projX, int[] projY, Rectangle r)
-        {
-            unsafe
-            {
-                MIplImage m = img.MIplImage;
-                byte* dataPtr = (byte*)m.imageData.ToPointer();
-                //int w = img.Width;
-                //int h = img.Height;
-                int w = r.Width;
-                int h = r.Height;
-                int nC = m.nChannels;
-                int wS = m.widthStep;
-                int x, y;
-                int prev = (int)dataPtr[0];
-
-                //1. Get horizontal and vertical projections
-                for (x = 0; x < w; x++)
-                {
-                    for (y = 0; y < h; y++)
-                    {
-                        if ((int)(dataPtr + y * wS + x * nC)[0] != prev) //black(0) or white(255)
-                        {
-                            projX[x] += 1;
-                            projY[y] += 1;
-                        }
-                        prev = (int)(dataPtr + y * wS + x * nC)[0];
-                    }
+                    str[i] = getLetter(img, rect[i + 1], 0);
                 }
+
             }
         }
 
-        public static Rectangle getPlateLoc(Image<Bgr, byte> img, int[] proj)
+
+        public static Rectangle getPlateLoc(Image<Bgr, byte> img)
         {
             unsafe 
             {
-                int h0 = (int)(img.Height / 5);
-                int w0 = (int)Math.Round(.15 * img.Width); //left limit
-                int w1 = (int)Math.Round(.85 * img.Width); //right limit
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                int w = m.width;
+                int h = m.height;
+                int nC = m.nChannels;
+                int wS = m.widthStep;
+
+                int h0 = (int)(.2 * img.Height);
+                int h1 = (int)(.9 * img.Height);
+                int w0 = (int)(.15 * img.Width); //left limit
+                int w1 = (int)(.85 * img.Width); //right limit
                 int[] projX = new int[w1 - w0];
-                int[] projY = new int[3 * h0]; //limit the plate location as it in center
+                int[] projY = new int[h1 - h0]; //limit the plate location as it in center
 
                 //if image has more black pixels -> white count for projections - or vice versa
                 int black = 0, white = 0;
-                for(int i = 0; i < projX.Length; i++)
+                for(int i = w0; i < w1; i++)
                 {
-                    if (projX[i] != 0)
-                        white++;
-                    else
-                        black++;
-                }
-                for (int i = 0; i < projY.Length; i++)
-                {
-                    if (projY[i] != 0)
-                        white++;
-                    else
-                        black++;
+                    for (int j = h0; j < h1; j++)
+                    {
+                        if ((dataPtr + i * nC + j * wS)[1] != 0)
+                            white++;
+                        else
+                            black++;
+                    }
                 }
                 if (black > white)
-                    Projections(img, projX, projY, new Rectangle(w0, h0, (int)(w1 - w0), (int)(3 * h0)), 255); //white
+                    Projections(img, projX, projY, new Rectangle(w0, h0, (int)(w1 - w0), (int)(h1 - h0)), 255); //white
                 if (black < white)
-                    Projections(img, projX, projY, new Rectangle(w0, h0, (int)(w1 - w0), (int)(3 * h0)), 0); //white
+                    Projections(img, projX, projY, new Rectangle(w0, h0, (int)(w1 - w0), (int)(h1 - h0)), 0); //black
 
-                //fillRect(img, new Rectangle(w0, h0, (int)(w1 - w0), (int)(3 * h0)));
+                //fillRect(img, new Rectangle(w0, h0, (int)(w1 - w0), (int)(h1 - h0)));
 
                 // for print histogram
-                for(int i = 0; i < projY.Length; i++)
-                {
-                    proj[i] = projY[i];
-                }
+                //Array.Copy(projY, proj, projY.Length);
 
                 //Vertical proj
-                int filterNum = projY.Max()/2;
+                int filterNum = projY.Max() / 2;
                 int prev = filterNum;
-                int maxIndex = Array.IndexOf(projY, projY.Max());
+                //int maxIndex = Array.IndexOf(projY, projY.Max());
                 List<int> listY = new List<int>();
                 
                 for (int i = 0; i < projY.Length; i++)
@@ -2146,100 +2165,65 @@ namespace SS_OpenCV
                 {
                     y[0] = listY[0];
                     y[1] = listY[1];
-                } else if (listY.Count > 4) //more points - take first 3 out
+                } else if (listY.Count > 9) //more points - take first 3 out
                 {
                     y[0] = listY[3];
-                    y[1] = listY[4];
+                    y[1] = listY[6];
                 } else //take first out
                 {
                     y[0] = listY[1];
+                    if (listY.Count > 9)
+                        y[1] = listY[8];
                     y[1] = listY[2];
                 }
-                fillRect(img, new Rectangle(w0, y[0], (int)(w1 - w0), y[1] - y[0]));
+                //fillRect(img, new Rectangle(w0, y[0], (int)(w1 - w0), y[1] - y[0]));
 
                 //Horizontal proj - need to get new proj based on Y recognition
                 prev = -1;
-                black = 0; 
-                white = 0;
-                for (int i = 0; i < projX.Length; i++)
-                {
-                    if (projX[i] != 0)
-                        white++;
-                    else
-                        black++;
-                }
-                for (int i = 0; i < projY.Length; i++)
-                {
-                    if (projY[i] != 0)
-                        white++;
-                    else
-                        black++;
-                }
-                if (black > white)
-                    Projections(img, projX, projY, new Rectangle(w0, y[0], (int)(3 * w0), y[1] - y[0]), 255); //white
-                if (black < white)
-                    Projections(img, projX, projY, new Rectangle(w0, y[0], (int)(3 * w0), y[1] - y[0]), 0); //black
+                Array.Clear(projX, 0, projX.Length);
+                Array.Clear(projY, 0, projY.Length);
+                Projections(img, projX, projY, new Rectangle(w0, y[0], (int)(w1 - w0), y[1] - y[0]), 0); //black
 
                 // for print histogram
-                /*
-                for (int i = 0; i < projX.Length; i++)
-                {
-                    proj[i] = projX[i];
-                }*/
+                //Array.Copy(projX, proj, projX.Length);
 
-                filterNum = projX.Max() / 3;
-                maxIndex = Array.IndexOf(projX, projX.Max());
+                filterNum = (int)(.15 * projX.Max());
+                //maxIndex = Array.IndexOf(projX, projX.Max());
                 List<int> listX = new List<int>();
+                List<int> maxInx = new List<int>();
+                int max = projX.Max() - 10;
 
                 for (int i = 0; i < projX.Length; i++)
                 {
                     if ((projX[i] >= filterNum && prev < filterNum) || (projX[i] <= filterNum && prev > filterNum))
                     {
-                        listX.Add(i);
+                        listX.Add(i + w0);
+                    }
+                    if ((projX[i] >= max && prev < max) || (projX[i] < max && prev >= max))
+                    {
+                        maxInx.Add(i + w0);
                     }
                     prev = projX[i];
                 }
                 int[] x = new int[2];
-                int count = 0;
                 for (int i = 0; i < listX.Count; i++)
                 {
-                    if (x[0] == 0)
+                    for (int j = 0; j < maxInx.Count; j++)
                     {
-                        for (int j = listX[i]; j >= 0; j--)
+                        if (listX[i] <= maxInx[j] + 5 && listX[i] > maxInx[j] - 5)
                         {
-                            if (projX[j] > filterNum)
-                                count++;
-                            else
-                                break;
+                            listX.RemoveAt(i);
                         }
-
-                        if (count > 100)
-                            x[0] = listX[i];
-
-                        count = 0;
-                    }
-                    else
-                    {
-                        for (int j = listX[i]; j < projX.Length; j++)
-                        {
-                            if (projX[j] > filterNum)
-                                count++;
-                            else
-                                break;
-                        }
-
-                        if (count > 100)
-                            x[1] = listX[i];
-
-                        count = 0;
                     }
                 }
-
+                x[0] = listX[0];
+                x[1] = listX[listX.Count - 1];
+                //fillRect(img, new Rectangle(x[0], y[0], x[1] - x[0], y[1] - y[0]));
                 return new Rectangle(x[0], y[0], x[1] - x[0], y[1] - y[0]);
             }
         }
 
-        public static void Level2(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy, Rectangle[] rect, string[] str, int[] proj)
+        public static void Level2(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy, Rectangle[] rect, string[] str, string cat)
         {
             unsafe
             {
@@ -2247,38 +2231,97 @@ namespace SS_OpenCV
                 Image<Bgr, byte> img1 = img.Copy();
 
                 //Locate plate: sobel + otsu
-                Sobel(img, imgCopy);
+                Sobel(img1, imgCopy);
                 for (int i = 0; i < 4; i++)
-                    Median(img, imgCopy);
-                ConvertToBW(img, 150);
+                    Median(img1, imgCopy);
+                 ConvertToBW(img1, 150);
 
-                //Get Image horizontal and vertical projections
-                /*
-                int[] projX = new int[img1.Width];
-                int[] projY = new int[img1.Height];
-                Projections(img1, projX, projY);
-                */
                 //Analyse projections in order to recognize the location of the plate
-                rect[0] = getPlateLoc(img, proj);
-                /*
+                rect[0] = getPlateLoc(img1);
+
                 //Convert to Black and White
                 Median(img, imgCopy);
                 ConvertToBW_Otsu(img);
 
-                int[] projX = new int[img.Width];
-                int[] projY = new int[img.Height];
-
+                int[] projX = new int[rect[0].Width];
+                int[] projY = new int[rect[0].Height];
+                
                 //Get horizontal and vertical projections
-                Projections(img, projX, projY, rect[0]);
+                Projections(img, projX, projY, rect[0], 0);
+                //Array.Copy(projX, proj, projX.Length);
 
                 //Get the letters position - rectangles
-                getLocLetters(projX, projY, rect, 2);
+                getLocLetters(projX, projY, rect, 2, cat);
 
                 //Compare to Data Base
-                for (int i = 0; i < str.Length; i++)
+                List<int> error = new List<int>();
+                int digits = 0;
+                for (int i = 0; i < str.Length; i++) //0 1 2 3 4 5
                 {
-                    str[i] = getLetter(img, rect[i + 1]);
+                    str[i] = getLetter(img, rect[i + 1], 0);
+                    if (str[i].All(char.IsDigit))
+                        digits++;
+                    
+                    if (i % 2 != 0) //odd
+                    {
+                        if (str[i].All(char.IsDigit) != str[i - 1].All(char.IsDigit))
+                        {
+                            error.Add(i);
+                        }
+                    }
+                    
                 }
+                if (error.Count > 0) //exist error
+                {
+                    switch (digits) //knows that the error maybe the letters
+                    {
+                        case 1: //letters letter/number letters - number
+                            if (!str[error[0]].All(char.IsDigit))
+                                str[error[0]] = getLetter(img, rect[error[0] + 1], 1); //number
+                            else
+                                str[error[0] - 1] = getLetter(img, rect[error[0]], 1); //number
+                            break;
+
+                        case 2: //letters letter/number letter/number - number letter
+                            if (!str[error[0]].All(char.IsDigit))
+                                str[error[0]] = getLetter(img, rect[error[0] + 1], 1); //number
+                            else
+                                str[error[0] - 1] = getLetter(img, rect[error[0]], 1); //number
+
+                            if (str[error[1]].All(char.IsDigit))
+                                str[error[1]] = getLetter(img, rect[error[1] + 1], 2); //letter
+                            else
+                                str[error[1] - 1] = getLetter(img, rect[error[1]], 2); //letter
+                            break;
+
+                        case 3: //numbers number/letter letters - number
+                            if (!str[error[0]].All(char.IsDigit))
+                                str[error[0]] = getLetter(img, rect[error[0] + 1], 1); //number
+                            else
+                                str[error[0] - 1] = getLetter(img, rect[error[0]], 1); //number
+                            break;
+
+                        case 4: //numbers number/letter number/letter - letter number
+                            if (str[error[0]].All(char.IsDigit))
+                                str[error[0]] = getLetter(img, rect[error[0] + 1], 2); //letter
+                            else
+                                str[error[0] - 1] = getLetter(img, rect[error[0]], 2);
+
+                            if (!str[error[1]].All(char.IsDigit))
+                                str[error[1]] = getLetter(img, rect[error[1] + 1], 1); //number
+                            else
+                                str[error[1] - 1] = getLetter(img, rect[error[1]], 1); 
+                            break;
+
+                        case 5: //numbers numbers number/letter - letter
+                            if (str[error[0]].All(char.IsDigit))
+                                str[error[0]] = getLetter(img, rect[error[0] + 1], 2); //letter
+                            else
+                                str[error[0] - 1] = getLetter(img, rect[error[0]], 2); //letter
+                            break;
+                    }
+                }
+                /*
                 */
             }
         }
@@ -2291,23 +2334,27 @@ namespace SS_OpenCV
                 byte* dataPtr = (byte*)m.imageData.ToPointer();
                 int width = img.Width;
                 int height = img.Height;
-                int nChan = m.nChannels; // number of channels - 3
+                int nC = m.nChannels; // number of channels - 3
+                int wS = m.widthStep;
                 int padding = m.widthStep - m.nChannels * m.width; // alinhament bytes (padding)
                 int x, y;
 
-                dataPtr += rect.X * nChan + rect.Y * m.widthStep;
+                dataPtr += rect.X * nC + rect.Y * wS;
 
                 for (y = 0; y < rect.Height; y++)
                 {
                     for (x = 0; x < rect.Width; x++)
                     {
-                        dataPtr[0] = (byte)0;
-                        dataPtr[1] = (byte)0;
-                        dataPtr[2] = (byte)125;
+                        if ((x == 0 || x == rect.Width - 1 || x == 1 || x == rect.Width - 2) || (y == 0 || y == rect.Height - 1 || y == 1 || y == rect.Height - 2))
+                        {
+                            dataPtr[0] = (byte)0;
+                            dataPtr[1] = (byte)0;
+                            dataPtr[2] = (byte)255;
+                        }
 
-                        dataPtr += nChan;
+                        dataPtr += nC;
                     }
-                    dataPtr += m.widthStep - rect.Width * nChan;
+                    dataPtr += wS - rect.Width * nC;
                 }
             }
         }
@@ -2350,8 +2397,7 @@ namespace SS_OpenCV
             out string LP_C3,
             out string LP_C4,
             out string LP_C5,
-            out string LP_C6,
-            int[] proj
+            out string LP_C6
         )
         {
             LP_Location = new Rectangle(220, 190, 200, 40);
@@ -2371,28 +2417,14 @@ namespace SS_OpenCV
 
             Rectangle[] r = new Rectangle[7];
             string[] str = new string[6];
-            //int[] proj = new int[img.Width];
 
             switch (difficultyLevel)
             {
                 case 1:
-                    Level1(img, imgCopy, r, str);
-                    break;
+                    Level1(img, imgCopy, r, str, LPType);
+                    break;  
                 case 2:
-                    Level2(img, imgCopy, r, str, proj);
-                    r[1] = new Rectangle(340, 190, 30, 40);
-                    r[2] = new Rectangle(360, 190, 30, 40);
-                    r[3] = new Rectangle(380, 190, 30, 40);
-                    r[4] = new Rectangle(400, 190, 30, 40);
-                    r[5] = new Rectangle(420, 190, 30, 40);
-                    r[6] = new Rectangle(440, 190, 30, 40);
-
-                    str[0] = "1";
-                    str[1] = "2";
-                    str[2] = "3";
-                    str[3] = "4";
-                    str[4] = "5";
-                    str[5] = "6";
+                    Level2(img, imgCopy, r, str, LPType);
                     break;
             }
 
@@ -2403,13 +2435,16 @@ namespace SS_OpenCV
             LP_Chr4 = r[4];
             LP_Chr5 = r[5];
             LP_Chr6 = r[6];
-            //fillRect(img, r[0]);
-            //fillRect(img, r[1]);
-            //fillRect(img, r[2]);
-            //fillRect(img, r[3]);
-            //fillRect(img, r[4]);
-            //fillRect(img, r[5]);
-            //fillRect(img, r[6]);
+            
+            /*
+            fillRect(img, r[0]);
+            fillRect(img, r[1]);
+            fillRect(img, r[2]);
+            fillRect(img, r[3]);
+            fillRect(img, r[4]);
+            fillRect(img, r[5]);
+            fillRect(img, r[6]);
+            */
 
             LP_C1 = str[0];
             LP_C2 = str[1];
