@@ -75,6 +75,7 @@
             this.equalizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ImageViewer = new System.Windows.Forms.PictureBox();
+            this.meanSolutionBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageViewer)).BeginInit();
@@ -254,55 +255,55 @@
             // translationToolStripMenuItem
             // 
             this.translationToolStripMenuItem.Name = "translationToolStripMenuItem";
-            this.translationToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.translationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.translationToolStripMenuItem.Text = "Translation";
             this.translationToolStripMenuItem.Click += new System.EventHandler(this.translationToolStripMenuItem_Click);
             // 
             // rotationToolStripMenuItem
             // 
             this.rotationToolStripMenuItem.Name = "rotationToolStripMenuItem";
-            this.rotationToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.rotationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rotationToolStripMenuItem.Text = "Rotation";
             this.rotationToolStripMenuItem.Click += new System.EventHandler(this.rotationToolStripMenuItem_Click);
             // 
             // rotationBilinearToolStripMenuItem
             // 
             this.rotationBilinearToolStripMenuItem.Name = "rotationBilinearToolStripMenuItem";
-            this.rotationBilinearToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.rotationBilinearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rotationBilinearToolStripMenuItem.Text = "RotationBilinear";
             this.rotationBilinearToolStripMenuItem.Click += new System.EventHandler(this.rotationBilinearToolStripMenuItem_Click);
             // 
             // zoomToolStripMenuItem
             // 
             this.zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
-            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.zoomToolStripMenuItem.Text = "Zoom";
             // 
             // scaleToolStripMenuItem
             // 
             this.scaleToolStripMenuItem.Name = "scaleToolStripMenuItem";
-            this.scaleToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.scaleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.scaleToolStripMenuItem.Text = "Scale";
             this.scaleToolStripMenuItem.Click += new System.EventHandler(this.scaleToolStripMenuItem_Click);
             // 
             // scaleBilinearToolStripMenuItem
             // 
             this.scaleBilinearToolStripMenuItem.Name = "scaleBilinearToolStripMenuItem";
-            this.scaleBilinearToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.scaleBilinearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.scaleBilinearToolStripMenuItem.Text = "ScaleBilinear";
             this.scaleBilinearToolStripMenuItem.Click += new System.EventHandler(this.scaleBilinearToolStripMenuItem_Click);
             // 
             // scaleXYToolStripMenuItem
             // 
             this.scaleXYToolStripMenuItem.Name = "scaleXYToolStripMenuItem";
-            this.scaleXYToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.scaleXYToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.scaleXYToolStripMenuItem.Text = "Scale_XY";
             this.scaleXYToolStripMenuItem.Click += new System.EventHandler(this.scaleXYToolStripMenuItem_Click);
             // 
             // scaleXYBilinearToolStripMenuItem
             // 
             this.scaleXYBilinearToolStripMenuItem.Name = "scaleXYBilinearToolStripMenuItem";
-            this.scaleXYBilinearToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.scaleXYBilinearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.scaleXYBilinearToolStripMenuItem.Text = "Scale_XY_Bilinear";
             this.scaleXYBilinearToolStripMenuItem.Click += new System.EventHandler(this.scaleXYBilinearToolStripMenuItem_Click);
             // 
@@ -314,7 +315,8 @@
             this.sobelToolStripMenuItem,
             this.diferentiationToolStripMenuItem,
             this.medianToolStripMenuItem,
-            this.robertsToolStripMenuItem});
+            this.robertsToolStripMenuItem,
+            this.meanSolutionBToolStripMenuItem});
             this.filtersToolStripMenuItem.Name = "filtersToolStripMenuItem";
             this.filtersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.filtersToolStripMenuItem.Text = "Filters";
@@ -322,42 +324,42 @@
             // mediaToolStripMenuItem
             // 
             this.mediaToolStripMenuItem.Name = "mediaToolStripMenuItem";
-            this.mediaToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.mediaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mediaToolStripMenuItem.Text = "Mean - solution A";
             this.mediaToolStripMenuItem.Click += new System.EventHandler(this.mediaToolStripMenuItem_Click);
             // 
             // nonUniformToolStripMenuItem
             // 
             this.nonUniformToolStripMenuItem.Name = "nonUniformToolStripMenuItem";
-            this.nonUniformToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.nonUniformToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.nonUniformToolStripMenuItem.Text = "Non_Uniform";
             this.nonUniformToolStripMenuItem.Click += new System.EventHandler(this.nonUniformToolStripMenuItem_Click);
             // 
             // sobelToolStripMenuItem
             // 
             this.sobelToolStripMenuItem.Name = "sobelToolStripMenuItem";
-            this.sobelToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.sobelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sobelToolStripMenuItem.Text = "Sobel";
             this.sobelToolStripMenuItem.Click += new System.EventHandler(this.sobelToolStripMenuItem_Click);
             // 
             // diferentiationToolStripMenuItem
             // 
             this.diferentiationToolStripMenuItem.Name = "diferentiationToolStripMenuItem";
-            this.diferentiationToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.diferentiationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.diferentiationToolStripMenuItem.Text = "Diferentiation";
             this.diferentiationToolStripMenuItem.Click += new System.EventHandler(this.diferentiationToolStripMenuItem_Click);
             // 
             // medianToolStripMenuItem
             // 
             this.medianToolStripMenuItem.Name = "medianToolStripMenuItem";
-            this.medianToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.medianToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.medianToolStripMenuItem.Text = "Median";
             this.medianToolStripMenuItem.Click += new System.EventHandler(this.medianToolStripMenuItem_Click);
             // 
             // robertsToolStripMenuItem
             // 
             this.robertsToolStripMenuItem.Name = "robertsToolStripMenuItem";
-            this.robertsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.robertsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.robertsToolStripMenuItem.Text = "Roberts";
             this.robertsToolStripMenuItem.Click += new System.EventHandler(this.robertsToolStripMenuItem_Click);
             // 
@@ -445,6 +447,13 @@
             this.ImageViewer.TabIndex = 6;
             this.ImageViewer.TabStop = false;
             // 
+            // meanSolutionBToolStripMenuItem
+            // 
+            this.meanSolutionBToolStripMenuItem.Name = "meanSolutionBToolStripMenuItem";
+            this.meanSolutionBToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.meanSolutionBToolStripMenuItem.Text = "Mean - solution B";
+            this.meanSolutionBToolStripMenuItem.Click += new System.EventHandler(this.meanSolutionBToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -514,6 +523,7 @@
         private System.Windows.Forms.ToolStripMenuItem scaleBilinearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scaleXYBilinearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem platesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem meanSolutionBToolStripMenuItem;
     }
 }
 

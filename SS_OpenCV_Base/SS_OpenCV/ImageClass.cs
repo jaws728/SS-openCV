@@ -873,6 +873,150 @@ namespace SS_OpenCV
                 }
             }
         }
+        public static void Mean_solutionB(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy)
+        {
+            unsafe
+            {
+                // get pointer to the start of the pictures
+                MIplImage m = img.MIplImage;
+                MIplImage mc = imgCopy.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer();
+                byte* dataPtrC = (byte*)mc.imageData.ToPointer();
+
+                byte* ptr1 = null;
+                byte* ptr2 = null;
+
+                int width = img.Width;
+                int height = img.Height;
+                int nC = m.nChannels;
+                int wS = m.widthStep;
+                int padding = wS - nC * width;
+                int x = 0, y = 0;
+                long[,] red = new long[width,height];
+                long[,] blue = new long[width,height];
+                long[,] green = new long[width,height];
+                int r, g, b;
+                int i = 0;
+
+                if (nC == 3)
+                {
+                    //first corner
+                    blue[0,0] = (dataPtrC[0] * 4 + (dataPtrC + wS)[0] * 2 + (dataPtrC + nC)[0] * 2 + (dataPtrC + wS + nC)[0]);
+                    green[0,0] = (dataPtrC[1] * 4 + (dataPtrC + wS)[1] * 2 + (dataPtrC + nC)[1] * 2 + (dataPtrC + wS + nC)[1]);
+                    red[0,0] = (dataPtrC[2] * 4 + (dataPtrC + wS)[2] * 2 + (dataPtrC + nC)[2] * 2 + (dataPtrC + wS + nC)[2]);
+
+                    //2nd pixel from 1st corner
+                    blue[1,0] = (blue[0,0] - (dataPtrC[0] * 2 + (dataPtrC + wS)[0]) + ((dataPtrC + 2 * nC)[0] * 2 + (dataPtrC + wS + 2 * nC)[0]));
+                    green[1,0] = (green[0,0] - (dataPtrC[1] * 2 + (dataPtrC + wS)[1]) + ((dataPtrC + 2 * nC)[1] * 2 + (dataPtrC + wS + 2 * nC)[1]));
+                    red[1,0] = (red[0,0] - (dataPtrC[2] * 2 + (dataPtrC + wS)[2]) + ((dataPtrC + 2 * nC)[2] * 2 + (dataPtrC + wS + 2 * nC)[2]));
+
+                    //top line
+                    for (x = 2; x < width - 1; x++)
+                    {
+                        ptr2 = (dataPtrC + x * nC);
+                        blue[x,0] = blue[x - 1, 0] - ((ptr2 - 2 * nC)[0] * 2 + (ptr2 - 2 * nC + wS)[0]) + ((ptr2 + nC)[0] * 2 + (ptr2 + nC + wS)[0]);
+                        green[x,0] = green[x - 1, 0] - ((ptr2 - 2 * nC)[1] * 2 + (ptr2 - 2 * nC + wS)[1]) + ((ptr2 + nC)[1] * 2 + (ptr2 + nC + wS)[1]);
+                        red[x,0] = red[x - 1, 0] - ((ptr2 - 2 * nC)[2] * 2 + (ptr2 - 2 * nC + wS)[2]) + ((ptr2 + nC)[2] * 2 + (ptr2 + nC + wS)[2]);
+                    }
+
+                    //2nd corner - right up
+                    ptr2 = (dataPtrC + (height - 1) * wS + (width - 1) * nC);
+                    blue[width - 1,0] = blue[width - 2, 0] - ((ptr2 - 2 * nC)[0] * 2 + (ptr2 - 2 * nC + wS)[0]) + (ptr2[0] * 2 + (ptr2 + wS)[0]);
+                    green[width - 1,0] = green[width - 2, 0] - ((ptr2 - 2 * nC)[1] * 2 + (ptr2 - 2 * nC + wS)[1]) + (ptr2[1] * 2 + (ptr2 + wS)[1]);
+                    red[width - 1, 0] = red[width - 2, 0] - ((ptr2 - 2 * nC)[2] * 2 + (ptr2 - 2 * nC + wS)[2]) + (ptr2[2] * 2 + (ptr2 + wS)[2]);
+
+                    //left line
+                    for (y = 1; y < height - 1; x++)
+                    {
+                        ptr2 = (dataPtrC + y * wS);
+                        blue[0,y] = blue[0, y - 1] - ((ptr2 - 2 * wS)[0] * 2 + (ptr2 - 2 * wS + nC)[0]) + ((ptr2 + wS)[0] * 2 + (ptr2 + nC + wS)[0]);
+                        green[0, y] = green[0, y - 1] - ((ptr2 - 2 * wS)[1] * 2 + (ptr2 - 2 * wS + nC)[1]) + ((ptr2 + wS)[1] * 2 + (ptr2 + nC + wS)[1]);
+                        red[0, y] = red[0, y - 1] - ((ptr2 - 2 * wS)[2] * 2 + (ptr2 - 2 * wS + nC)[2]) + ((ptr2 + wS)[2] * 2 + (ptr2 + nC + wS)[2]);
+                    }
+
+                    //3rd corner - left down
+                    ptr2 = (dataPtrC + (height - 1) * wS);
+                    blue[0, height - 1] = blue[0, height - 2] - ((ptr2 - 2 * wS)[0] * 2 + (ptr2 - 2 * wS + nC)[0]) + (ptr2[0] * 2 + (ptr2 + nC)[0]);
+                    green[0, height - 1] = green[0, height - 2] - ((ptr2 - 2 * wS)[1] * 2 + (ptr2 - 2 * wS + nC)[1]) + (ptr2[1] * 2 + (ptr2 + nC)[1]);
+                    red[0,height - 1] = red[0, height - 2] - ((ptr2 - 2 * wS)[2] * 2 + (ptr2 - 2 * wS + nC)[2]) + (ptr2[2] * 2 + (ptr2 + nC)[2]);
+
+                    //2nd pixel from 3rd corner - left down
+                    //ptr1 = (dataPtr + (height - 1) * wS + nC);
+                    ptr2 = (dataPtrC + (height - 1) * wS + nC);
+                    blue[1,height - 1] = blue[0, height - 1] - ((ptr2 - nC)[0] * 2 + (ptr2 - nC - wS)[0]) + ((ptr2 + nC)[0] * 2 + (ptr2 + nC - wS)[0]);
+                    green[1, height - 1] = green[0, height - 1] - ((ptr2 - nC)[1] * 2 + (ptr2 - nC - wS)[1]) + ((ptr2 + nC)[1] * 2 + (ptr2 + nC - wS)[1]);
+                    red[1, height - 1] = red[0, height - 1] - ((ptr2 - nC)[2] * 2 + (ptr2 - nC - wS)[2]) + ((ptr2 + nC)[2] * 2 + (ptr2 + nC - wS)[2]);
+
+                    //bottom line
+                    for (x = 2; x < width - 1; x++)
+                    {
+                        ptr2 = (dataPtrC + (height - 1) * wS + x * nC);
+                        blue[x, height - 1] = blue[x - 1, height - 1] - ((ptr2 - 2 * nC)[0] * 2 + (ptr2 - 2 * nC - wS)[0]) + ((ptr2 + nC)[0] * 2 + (ptr2 + nC - wS)[0]);
+                        green[x, height - 1] = green[x - 1, height - 1] - ((ptr2 - 2 * nC)[1] * 2 + (ptr2 - 2 * nC - wS)[1]) + ((ptr2 + nC)[1] * 2 + (ptr2 + nC - wS)[1]);
+                        red[x, height - 1] = red[x - 1, height - 1] - ((ptr2 - 2 * nC)[2] * 2 + (ptr2 - 2 * nC - wS)[2]) + ((ptr2 + nC)[2] * 2 + (ptr2 + nC - wS)[2]);
+                    }
+
+                    //last corner - right down
+                    ptr2 = (dataPtrC + (height - 1) * wS + (width - 1) * nC);
+                    blue[width - 1,height - 1] = blue[width - 2, height - 1] - ((ptr2 - 2 * nC)[0] * 2 + (ptr2 - 2 * nC - wS)[0]) + (ptr2[0] * 2 + (ptr2 - wS)[0]);
+                    green[width - 1, height - 1] = green[width - 2, height - 1] - ((ptr2 - 2 * nC)[1] * 2 + (ptr2 - 2 * nC - wS)[1]) + (ptr2[1] * 2 + (ptr2 - wS)[1]);
+                    red[width - 1, height - 1] = red[width - 2, height - 1] - ((ptr2 - 2 * nC)[2] * 2 + (ptr2 - 2 * nC - wS)[2]) + (ptr2[2] * 2 + (ptr2 - wS)[2]);
+                    
+                    //right line
+                    for (y = 1; y < height - 1; x++)
+                    {
+                        ptr2 = (dataPtrC + y * wS + (width - 1) * nC);
+                        blue[width - 1,  y] = blue[width - 1, y - 1] - ((ptr2 - 2 * wS)[0] * 2 + (ptr2 - 2 * wS - nC)[0]) + ((ptr2 + wS)[0] * 2 + (ptr2 - nC + wS)[0]);
+                        green[width - 1, y] = green[width - 1, y - 1] - ((ptr2 - 2 * wS)[1] * 2 + (ptr2 - 2 * wS - nC)[1]) + ((ptr2 + wS)[1] * 2 + (ptr2 - nC + wS)[1]);
+                        red[width - 1, y] = red[width - 1, y - 1] - ((ptr2 - 2 * wS)[2] * 2 + (ptr2 - 2 * wS - nC)[2]) + ((ptr2 + wS)[2] * 2 + (ptr2 - nC + wS)[2]);
+                    }
+
+                    //for the rest of the pixels 
+                    for (y = 1; y < height - 1; y++)
+                    {
+                        for (x = 1; x < width - 1; x++)
+                        {
+                            ptr1 = (dataPtrC + y * wS + x * nC);
+                            blue[x, y] = blue[x - 1, y];
+                            green[x,y] = green[x - 1, y];
+                            red[x,y] = red[x - 1, y];
+
+                            for (i = -1; i < 2; i++)
+                            {
+                                blue[x,y] -= (ptr1 + i * wS + -2 * nC)[0];
+                                green[x,y] -= (ptr1 + i * wS + -2 * nC)[1];
+                                red[x,y] -= (ptr1 + i * wS + -2 * nC)[2];
+                                blue[x,y] += (ptr1 + i * wS + nC)[0];
+                                green[x,y] += (ptr1 + i * wS + nC)[1];
+                                red[x,y] += (ptr1 + i * wS + nC)[2];
+                            }
+                        }
+                    }
+
+                    for (y = 0; y < height; y++)
+                    {
+                        for (x = 0; x < width; x++)
+                        {
+                            b = (int)Math.Round(blue[x,y] / 9.0);
+                            g = (int)Math.Round(green[x,y] / 9.0);
+                            r = (int)Math.Round(red[x,y] / 9.0);
+
+                            if (b > 255)
+                                b = 255;
+                            if (g > 255)
+                                g = 255;
+                            if (r > 255)
+                                r = 255;
+
+                            (dataPtr + y * wS + x * nC)[0] = (byte)b;
+                            (dataPtr + y * wS + x * nC)[1] = (byte)g;
+                            (dataPtr + y * wS + x * nC)[2] = (byte)r;
+                        }
+                    }
+                }
+            }
+        }
+
 
         public static void NonUniform(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy, float[,] matrix, float matrixWeight, float offset)
         {
@@ -1556,23 +1700,7 @@ namespace SS_OpenCV
                 // get pointer to the start of the pictures
                 MIplImage m = img.MIplImage;
                 MIplImage mc = imgCopy.MIplImage;
-                /*
-                byte* dataPtr = (byte*)m.imageData.ToPointer();
-                byte* dataPtrC = (byte*)mc.imageData.ToPointer();
-
-                byte* ptr1 = null;
-
-                int width = img.Width;
-                int height = img.Height;
-                int nC = m.nChannels;
-                int wS = m.wS;
-                int padding = wS - nC * width;
-                int x, y;
-                int red, green, blue;
-                */
-                //calculate the median pixel: img.SmoothMedian(3).CopyTo(img);
                 imgCopy.SmoothMedian(3).CopyTo(img);
-                
                 //bonus: implemetation by us
             }
         }
@@ -1776,79 +1904,6 @@ namespace SS_OpenCV
         {
             unsafe
             {
-                /*
-                MIplImage m = img.MIplImage;
-                byte* dataPtr = (byte*)m.imageData.ToPointer();
-                int width = img.Width;
-                int height = img.Height;
-                int nC = m.nChannels;
-                int wS = m.widthStep;
-                
-                int[] hist = Histogram_Gray(img);
-                float[] prob = new float[256];
-                float area = width * height;
-                int x, y, max = 0, variance, threshold = 0;
-                float q1 = 0;
-                float q2 = 0;
-                float u1 = 0;
-                float u2 = 0;
-
-                if (nC == 3)
-                {
-                    //1 - get max value for variance = q1.q2.(u1-u2)^2
-                    for (int i = 0; i < 256; i++)
-                        prob[i] = hist[i] / area;
-
-                    for (int i = 1; i < 256; i++) //sum all for u2, then just do inverse of u1
-                        u2 += i * prob[i];
-
-                    //for (int i = 0; i < 256; i++) //sum all for q2, then can just inverse of q1
-                    //    q2 += prob[i];
-                    q1 = prob[0];
-                    q2 = 1 - q1;
-                    //u1 = prob[0];
-                    for (int i = 1; i < 256; i++)
-                    {
-                        q1 += prob[i];
-                        q2 -= prob[i];
-
-                        u1 += i * prob[i];
-                        u2 -= i * prob[i];
-
-                        
-                        variance = (int)Math.Round(q1 * q2 * Math.Pow((u1 / q1 - u2 / q2), 2.0));
-
-                        if (variance > max)
-                        {
-                            threshold = i;
-                            max = variance;
-                        }
-                    }
-                    */
-                //2 - Convert now to B&W with threshold as value separator
-                /*int gray;
-                for (x = 0; x < width; x++)
-                {
-                    for (y = 0; y < height; y++)
-                    {
-                        gray = (int)Math.Round(((dataPtr + y * wS + x * nC)[0] + (dataPtr + y * wS + x * nC)[1] + (dataPtr + y * wS + x * nC)[2]) / 3.0);
-                        if (gray > threshold)
-                        {
-                            (dataPtr + y * wS + x * nC)[0] = (byte)255;
-                            (dataPtr + y * wS + x * nC)[1] = (byte)255;
-                            (dataPtr + y * wS + x * nC)[2] = (byte)255;
-
-                        }
-                        else
-                        {
-                            (dataPtr + y * wS + x * nC)[0] = (byte)0;
-                            (dataPtr + y * wS + x * nC)[1] = (byte)0;
-                            (dataPtr + y * wS + x * nC)[2] = (byte)0;
-                        }
-                    }
-                }
-                }*/
-
                 int threshold = otsu(img);
                 ConvertToBW(img, threshold);
             }
@@ -1860,8 +1915,6 @@ namespace SS_OpenCV
             {
                 MIplImage m = img.MIplImage;
                 byte* dataPtr = (byte*)m.imageData.ToPointer();
-                //int w = img.Width;
-                //int h = img.Height;
                 int w = r.Width + r.X;
                 int h = r.Height + r.Y;
                 int nC = m.nChannels;
@@ -1894,36 +1947,11 @@ namespace SS_OpenCV
             {
                 int[] xLoc1 = new int[16];
                 int[] xLoc = new int[12];
-                int[] xLocL = new int[8];
-                int[] xLocR = new int[8];
                 int[] yLoc = new int[2];
                 int prev = projX[0];
-                int i = 0; //, j = 0;
+                int i = 0; 
                 int xPas = projX.Max() / 8;//8
-                //int yPas = 5; //projY.Max() / 5;//5
 
-                //for x positions
-                /*
-                for (int x = 0; x < projX.Length; x++)
-                {
-                    if (projX[x] >= xPas && prev < xPas && i != 8)
-                        xLocL[i++] = x;
-                    if (projX[x] <= xPas && prev > xPas && j != 8)
-                        xLocR[j++] = x;
-                    prev = projX[x];
-                }
-                */
-
-                /*
-                if (xLocL[xLocL.Length - 1] == 0)
-                {
-                    for (i = xLocL.Length - 1; i > 1; i--)
-                    {
-                        xLocL[i] = xLocL[i - 1];
-                    }
-                    xLocL[0] = 0;
-                }
-                */
                 if (level == 2)
                 {
                     xLoc1[i++] = 0;
@@ -1975,22 +2003,6 @@ namespace SS_OpenCV
                 //for y positions
                 if (level == 1)
                 {
-                    /*
-                    i = 0;
-                    prev = -1;
-                    for (int y = 0; y < projY.Length; y++)
-                    {
-                        if (i == 2)
-                            break;
-
-                        if ((projY[y] > yPas && prev < yPas) || (projY[y] < yPas && prev > yPas)) //transfer from no pixel to pixels or vise versa
-                        {
-                            //save the x value to end/begin of the letter
-                            yLoc[i++] = y;
-                        }
-                        prev = projY[y];
-                    }
-                    */
                     yLoc[0] = (int)(projY.Length * .06);//10;
                     yLoc[1] = (int)(projY.Length * .96);
                     //yLoc[0] = 0;
@@ -2086,9 +2098,6 @@ namespace SS_OpenCV
 
                 int[] projX = new int[img.Width];
                 int[] projY = new int[img.Height];
-                //Put all arrays with zero value
-                //Array.Clear(projX, 0, projX.Length);
-                //Array.Clear(projY, 0, projY.Length);
 
                 //1. Get horizontal and vertical projections
                 rect[0] = new Rectangle(0, 0, img.Width, img.Height);
@@ -2100,9 +2109,72 @@ namespace SS_OpenCV
                 checkLetterRectangle(img, rect);
 
                 //3. Compare to Data Base
+                List<int> error = new List<int>();
+                int digits = 0;
                 for (int i = 0; i < str.Length; i++) //0 1 2 3 4 5
                 {
                     str[i] = getLetter(img, rect[i + 1], 0);
+                    if (str[i].All(char.IsDigit))
+                        digits++;
+
+                    if (i % 2 != 0) //odd
+                    {
+                        if (str[i].All(char.IsDigit) != str[i - 1].All(char.IsDigit))
+                        {
+                            error.Add(i);
+                        }
+                    }
+
+                }
+                if (error.Count > 0) //exist error
+                {
+                    switch (digits) //knows that the error maybe the letters
+                    {
+                        case 1: //letters letter/number letters - number
+                            if (!str[error[0]].All(char.IsDigit))
+                                str[error[0]] = getLetter(img, rect[error[0] + 1], 1); //number
+                            else
+                                str[error[0] - 1] = getLetter(img, rect[error[0]], 1); //number
+                            break;
+
+                        case 2: //letters letter/number letter/number - number letter
+                            if (!str[error[0]].All(char.IsDigit))
+                                str[error[0]] = getLetter(img, rect[error[0] + 1], 1); //number
+                            else
+                                str[error[0] - 1] = getLetter(img, rect[error[0]], 1); //number
+
+                            if (str[error[1]].All(char.IsDigit))
+                                str[error[1]] = getLetter(img, rect[error[1] + 1], 2); //letter
+                            else
+                                str[error[1] - 1] = getLetter(img, rect[error[1]], 2); //letter
+                            break;
+
+                        case 3: //numbers number/letter letters - number
+                            if (!str[error[0]].All(char.IsDigit))
+                                str[error[0]] = getLetter(img, rect[error[0] + 1], 1); //number
+                            else
+                                str[error[0] - 1] = getLetter(img, rect[error[0]], 1); //number
+                            break;
+
+                        case 4: //numbers number/letter number/letter - letter number
+                            if (str[error[0]].All(char.IsDigit))
+                                str[error[0]] = getLetter(img, rect[error[0] + 1], 2); //letter
+                            else
+                                str[error[0] - 1] = getLetter(img, rect[error[0]], 2);
+
+                            if (!str[error[1]].All(char.IsDigit))
+                                str[error[1]] = getLetter(img, rect[error[1] + 1], 1); //number
+                            else
+                                str[error[1] - 1] = getLetter(img, rect[error[1]], 1);
+                            break;
+
+                        case 5: //numbers numbers number/letter - letter
+                            if (str[error[0]].All(char.IsDigit))
+                                str[error[0]] = getLetter(img, rect[error[0] + 1], 2); //letter
+                            else
+                                str[error[0] - 1] = getLetter(img, rect[error[0]], 2); //letter
+                            break;
+                    }
                 }
 
             }
