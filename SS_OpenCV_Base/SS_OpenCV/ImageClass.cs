@@ -1991,17 +1991,19 @@ namespace SS_OpenCV
                         prev = projY[y];
                     }
                     */
-                    yLoc[0] = (int)(projY.Length * .08);//10;
+                    yLoc[0] = (int)(projY.Length * .06);//10;
                     yLoc[1] = (int)(projY.Length * .96);
+                    //yLoc[0] = 0;
+                    //yLoc[1] = projY.Length - 1;
                     r[0] = new Rectangle(xLoc[0], yLoc[0], xLoc[11] - xLoc[0], yLoc[1] - yLoc[0]);
                     for (i = 0; i < 12; i += 2)
                     {
-                        r[i / 2 + 1] = new Rectangle(xLoc[i] - 2, yLoc[0], xLoc[i + 1] - xLoc[i] + 4, yLoc[1] - yLoc[0]);
+                        r[i / 2 + 1] = new Rectangle(xLoc[i] - 4, yLoc[0], xLoc[i + 1] - xLoc[i] + 8, yLoc[1] - yLoc[0]);
                     }
                 } else
                 {
-                    yLoc[0] = r[0].Y;
-                    yLoc[1] = r[0].Height + r[0].Y;
+                    yLoc[0] = r[0].Y - 4;
+                    yLoc[1] = r[0].Height + r[0].Y + 8;
                     for (i = 0; i < 12; i += 2)
                     {
                         r[i / 2 + 1] = new Rectangle(xLoc[i] + r[0].X - 2, yLoc[0], xLoc[i + 1] - xLoc[i] + 4, yLoc[1] - yLoc[0]);
@@ -2095,6 +2097,7 @@ namespace SS_OpenCV
 
                 //2. Get the letters position - rectangles
                 getLocLetters(projX, projY, rect, 1, cat);
+                checkLetterRectangle(img, rect);
 
                 //3. Compare to Data Base
                 for (int i = 0; i < str.Length; i++) //0 1 2 3 4 5
@@ -2172,9 +2175,10 @@ namespace SS_OpenCV
                 } else //take first out
                 {
                     y[0] = listY[1];
-                    if (listY.Count > 9)
+                    if (listY.Count > 8)
                         y[1] = listY[8];
-                    y[1] = listY[2];
+                    else
+                        y[1] = listY[2];
                 }
                 //fillRect(img, new Rectangle(w0, y[0], (int)(w1 - w0), y[1] - y[0]));
 
@@ -2223,6 +2227,68 @@ namespace SS_OpenCV
             }
         }
 
+        public static void checkLetterRectangle(Image<Bgr, byte> img, Rectangle[] rect)
+        {
+            unsafe
+            {
+                for (int i = 1; i < rect.Length; i++)
+                {
+                    int[] projX = new int[rect[i].Width];
+                    int[] projY = new int[rect[i].Height];
+                    Projections(img, projX, projY, rect[i], 0); //black
+                    int filterNum = (int)(projX.Max() / 8); //7.5
+                    int prev = projX[0];
+                    int x0 = 0, x1 = 0, y0 = 0, y1 = 0, start = prev;
+                    for (int x = 0; x < projX.Length; x++)
+                    {
+                        if (x1 != 0)
+                            break;
+                        if (start >= filterNum) //start w/ black points
+                        {
+                            start = projX[x];
+                            continue;
+                        }
+                        if (projX[x] >= filterNum && prev < filterNum)
+                            x0 = x + rect[i].X;
+                        if (projX[x] < filterNum && prev >= filterNum && x0 != 0)
+                            x1 = x + rect[i].X;
+                        prev = projX[x];
+                    }
+                    if (x0 == 0 || x1 == 0)
+                    {
+                        x0 = rect[i].X;
+                        x1 = rect[i].X + rect[i].Width;
+                    }
+                    
+                    prev = projY[0];
+                    start = prev;
+                    filterNum = (int)(projY.Max() / 9); //8
+                    for (int y = 0; y < projY.Length; y++)
+                    {
+                        if (y1 != 0)
+                            break;
+                        if (start >= filterNum) //start w/ black points
+                        {
+                            start = projY[y];
+                            continue;
+                        }
+                        if (projY[y] >= filterNum && prev < filterNum)
+                            y0 = y + rect[i].Y;
+                        if (projY[y] < filterNum && prev >= filterNum && y0 != 0)
+                            y1 = y + rect[i].Y;
+                        prev = projY[y];
+                    }
+                    if (y0 == 0 || y1 == 0)
+                    {
+                        y0 = rect[i].Y;
+                        y1 = rect[i].Y + rect[i].Height;
+                    }
+
+                    rect[i] = new Rectangle(x0, y0, x1 - x0, y1 - y0);
+                }
+            }
+        }
+
         public static void Level2(Image<Bgr, byte> img, Image<Bgr, byte> imgCopy, Rectangle[] rect, string[] str, string cat)
         {
             unsafe
@@ -2252,6 +2318,7 @@ namespace SS_OpenCV
 
                 //Get the letters position - rectangles
                 getLocLetters(projX, projY, rect, 2, cat);
+                checkLetterRectangle(img, rect);
 
                 //Compare to Data Base
                 List<int> error = new List<int>();
@@ -2321,8 +2388,6 @@ namespace SS_OpenCV
                             break;
                     }
                 }
-                /*
-                */
             }
         }
 
@@ -2438,13 +2503,13 @@ namespace SS_OpenCV
             
             /*
             fillRect(img, r[0]);
+            */
             fillRect(img, r[1]);
             fillRect(img, r[2]);
             fillRect(img, r[3]);
             fillRect(img, r[4]);
             fillRect(img, r[5]);
             fillRect(img, r[6]);
-            */
 
             LP_C1 = str[0];
             LP_C2 = str[1];
